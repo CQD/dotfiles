@@ -1,0 +1,30 @@
+[core]
+	excludesfile = /Users/wesleyliao/.gitignore_global
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+
+[user]
+        email = wesleyliao@kkbox.com
+        name = CQD
+
+[color]
+        ui = auto
+        status = auto
+        branch = auto
+
+[alias]
+        ci = commit
+        co = checkout
+        di = diff
+        st = status
+        br = branch
+        co = checkout
+        lg = log --graph --pretty=tformat:'%Cred%h%Creset -%C(yellow)%d%Creset %s %C(bold black)- %cn %Creset%Cgreen(%cr)%Creset' --abbrev-commit --date=local
+        lga = log --graph --pretty=tformat:'%Cred%h%Creset -%C(yellow)%d%Creset %s %C(bold black)- %cn %Creset%Cgreen(%cr)%Creset' --abbrev-commit --date=local --all
+        lgs = log --graph --pretty=tformat:'%Cred%h%C(yellow)%d%Creset' --abbrev-commit --date=local
+        lgas = log --graph --pretty=tformat:'%Cred%h%C(yellow)%d%Creset' --abbrev-commit --date=local --all
+        lgsa = log --graph --pretty=tformat:'%Cred%h%C(yellow)%d%Creset' --abbrev-commit --date=local --all
