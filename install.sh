@@ -8,8 +8,6 @@ umask 077
 # get latest
 git pull
 
-#
-cp ${BASEDIR}/.inputrc ~/
 
 #
 #cp ${BASEDIR}/.profile ~/
