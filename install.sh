@@ -17,6 +17,9 @@ cp ${BASEDIR}/.bashrc ~/
 #
 cp ${BASEDIR}/.tmux.conf ~/
 
+#
+cp ${BASEDIR}/.gitconfig ~/
+
 # vim
 cp ${BASEDIR}/.vimrc ~/
 mkdir -p ~/.vim/
