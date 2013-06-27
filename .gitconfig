@@ -23,6 +23,8 @@
         st = status
         br = branch
         co = checkout
+        rb = rebase
+        cp = cherry-pick
         lg = log --graph --pretty=tformat:'%Cred%h%Creset -%C(yellow)%d%Creset %s %C(bold black)- %cn %Creset%Cgreen(%cr)%Creset' --abbrev-commit --date=local
         lga = log --graph --pretty=tformat:'%Cred%h%Creset -%C(yellow)%d%Creset %s %C(bold black)- %cn %Creset%Cgreen(%cr)%Creset' --abbrev-commit --date=local --all
         lgs = log --graph --pretty=tformat:'%Cred%h%C(yellow)%d%Creset' --abbrev-commit --date=local
