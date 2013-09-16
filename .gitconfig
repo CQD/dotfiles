@@ -34,4 +34,4 @@
         rebase = true
 
 [pretty]
-        ol = format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %C(bold black)- %cn %Creset%Cgreen(%cr)%Creset'
+        ol = format:%Cred%h%Creset -%C(yellow)%d%Creset %s %C(bold black)- %cn %Creset%Cgreen(%cr)%Creset
