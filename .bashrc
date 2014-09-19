@@ -25,7 +25,21 @@ PS1='\u@\[\e[0;32m\]\h\[\e[0m\]:\[\e[0;34m\]\w\[\e[0;32m\]$(git_branch)\[\e[0m\]
 export TERM=xterm-256color
 
 #sets up proper alias commands when called
-alias ls='ls -vG'
+if [ "$(uname)" = "Linux" ]; then
+    # set up color for linux
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+    alias ls='ls --color=auto -G'
+else
+    alias ls='ls -G'
+fi
+
 alias ll='ls -al'
 alias la='ls -a'
-alias ta='tmux attach'
+
+# if tmux exists, set up alias and re-attatch
+if  type tmux &> /dev/null ; then
+    alias ta='tmux attach'
+    ta # always re-connect
+fi
