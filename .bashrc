@@ -9,8 +9,21 @@ export LSCOLORS=ExFxCxDxBxegedabagacad
 
 # for git branch display 
 function git_branch {
-    ref=$(git symbolic-ref HEAD 2> /dev/null) || return;
-    echo "("${ref#refs/heads/}")";
+    if ! type git &> /dev/null ; then
+        return
+    fi
+
+    ref=$(git symbolic-ref HEAD 2> /dev/null);
+    if [ $ref ] ; then
+        echo "("${ref#refs/heads/}")";
+        return
+    fi
+
+    hash=$(git log --pretty=format:'%h' -n 1 2> /dev/null);
+    if [ $hash ] ; then
+        echo "["$hash"]";
+        return
+    fi
 }
 
 #sets up the color scheme for list
