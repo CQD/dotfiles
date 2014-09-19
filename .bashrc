@@ -9,21 +9,40 @@ export LSCOLORS=ExFxCxDxBxegedabagacad
 
 # for git branch display 
 function git_branch {
+    # do nothing if there is no git
     if ! type git &> /dev/null ; then
         return
     fi
 
-    ref=$(git symbolic-ref HEAD 2> /dev/null);
-    if [ $ref ] ; then
-        echo "("${ref#refs/heads/}")";
+    # do nothing if this is not a git repo
+    local git_status="`git status -unormal 2>&1`"
+    if [[ "$git_status" =~ Not\ a\ git\ repo ]]; then
         return
     fi
 
-    hash=$(git log --pretty=format:'%h' -n 1 2> /dev/null);
-    if [ $hash ] ; then
-        echo "["$hash"]";
-        return
+    # print branch name or hash
+    local ref=$(git symbolic-ref HEAD 2> /dev/null);
+    if [ $ref ] ; then
+        # print branch name
+        local branch="${ref#refs/heads/}";
+        local Color_on='\033[0;32m'
+    else
+        # print hash for detached HEAD
+        local branch=$(git log --pretty=format:'%h' -n 1 2> /dev/null);
+        local Color_on='\033[0;33m'
     fi
+
+    # print status
+    if [[ "$git_status" =~ nothing\ to\ commit ]]; then
+        local stat=""
+    elif [[ "$git_status" =~ nothing\ added\ to\ commit\ but\ untracked\ files\ present ]]; then
+        local stat="\033[0;36m+\033[0m"
+    else
+        local stat="\033[1;31m*\033[0m"
+    fi
+
+    # output
+    echo -ne "$Color_on($branch$stat$Color_on)\033[0m"
 }
 
 #sets up the color scheme for list
