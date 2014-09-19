@@ -26,7 +26,6 @@ set visualbell
 set wildmenu
 set backspace=2
 set nowrap
-set mouse=a
 
 syntax on
 "
