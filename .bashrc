@@ -48,9 +48,6 @@ function git_branch {
     echo -ne "$Color_on($branch$stat$Color_on)\033[0m"
 }
 
-#sets up the color scheme for list
-export LSCOLORS=ExFxCxDxBxegedabagacad
-
 #sets up the prompt color (currently a green similar to linux terminal)
 #PS1='\[\e[0;33m\]\u\[\e[0m\]@\[\e[0;32m\]\h\[\e[0m\]:\[\e[0;34m\]\w\[\e[0m\]\$ '
 PS1='\u@\[\e[0;32m\]\h\[\e[0m\]:\[\e[0;34m\]\w\[\e[0;32m\]$(git_branch)\[\e[0m\]\$ '
