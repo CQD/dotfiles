@@ -17,12 +17,18 @@
         din = diff --name-only
         dist = diff --stat
         dicw = diff --color-words
+        dic = diff --cached
+        dinc = diff --name-only --cached
+        distc = diff --stat --cached
+        dicwc = diff --color-words --cached
         st = status
         sh = show
         shn = show --name-only
         br = branch
         co = checkout
         rb = rebase
+        rbc = rebase --continue
+        rba = rebase --abort
         cp = cherry-pick
         lg = log --graph --pretty=ol  --abbrev-commit --date=local
         lga = log --graph --pretty=ol --abbrev-commit --date=local --all
