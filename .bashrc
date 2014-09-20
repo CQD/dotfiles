@@ -84,3 +84,8 @@ fi
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
+
+# include machine depending settings that not to be included in dotfile repo
+if [ -f ./.bashrc_local ] ; then
+    source .bashrc_local
+fi
