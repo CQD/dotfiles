@@ -1,3 +1,5 @@
 # tmp files
+.*.swo
+.*.swn
 .*.swp
 .DS_Store
