@@ -47,6 +47,8 @@ highlight Search cterm=none ctermbg=blue
 " nmap <F2> :NERDTreeToggle<CR>
 " nmap <Tab> <C-w>w
 "
+map <tab><tab> :tabnext<CR>
+
 " other
 au BufNewFile,BufRead *.go set filetype=go
 au BufNewFile,BufRead *.json setf json
