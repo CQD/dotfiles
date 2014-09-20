@@ -75,7 +75,7 @@ alias la='ls -a'
 # if tmux exists, set up alias and re-attatch
 if  type tmux &> /dev/null ; then
     alias ta='tmux attach'
-    ta # always re-connect
+    tmux attach # always re-connect
 fi
 
 # enable programmable completion features (you don't need to enable
