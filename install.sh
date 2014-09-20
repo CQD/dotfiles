@@ -5,10 +5,6 @@ BASEDIR=`dirname $0`
 #
 umask 077
 
-# get latest
-git pull
-
-
 #
 #cp ${BASEDIR}/.profile ~/
 cp ${BASEDIR}/.bash_profile ~/
