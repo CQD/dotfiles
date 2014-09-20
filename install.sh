@@ -18,6 +18,7 @@ cp ${BASEDIR}/.tmux.conf ~/
 #
 echo installing git config
 cp ${BASEDIR}/.gitconfig ~/
+cp ${BASEDIR}/.gitignore_global ~/
 
 # vim
 echo installing vim config
