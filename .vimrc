@@ -18,6 +18,8 @@ set number
 set ruler
 set scrolloff=3
 set secure
+set smartindent
+set tabstop=4
 set shiftwidth=4
 set showmatch
 set smartcase
