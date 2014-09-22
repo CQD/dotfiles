@@ -1,5 +1,20 @@
+##
 # tmp files
+##
+#vim
 .*.swo
 .*.swn
 .*.swp
+*~
+
+##
+# OS related files
+##
 .DS_Store
+
+##
+# Eclipse project file
+##
+.buildpath
+.project
+.settings/
