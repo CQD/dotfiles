@@ -48,6 +48,7 @@ highlight Search cterm=none ctermbg=blue
 " nmap <Tab> <C-w>w
 "
 map <tab><tab> :tabnext<CR>
+map <S-tab><S-tab> :tabprev<CR>
 
 " other
 au BufNewFile,BufRead *.go set filetype=go
