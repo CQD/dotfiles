@@ -63,7 +63,7 @@ do
       wg cps https://getcomposer.org/composer.phar
       wg csf http://get.sensiolabs.org/php-cs-fixer.phar
       wg psysh http://psysh.org/psysh
-      # todo: phpcs
+      wg pcs http://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
       # todo: colordiff
       break;
       ;;
@@ -71,7 +71,7 @@ do
       wg cps https://getcomposer.org/composer.phar f
       wg csf http://get.sensiolabs.org/php-cs-fixer.phar f
       wg psysh http://psysh.org/psysh f
-      # todo: phpcs
+      wg pcs http://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar f
       # todo: colordiff
       break;
       ;;
