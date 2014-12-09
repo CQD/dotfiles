@@ -89,3 +89,7 @@ fi
 if [ -f ./.bashrc_local ] ; then
     source .bashrc_local
 fi
+
+# ssh-agent manangement
+[ -z "$HOSTNAME" ] && HOSTNAME=`uname -n`
+[[ -f ~/.keychain/$HOSTNAME-sh ]]  && source $HOME/.keychain/$HOSTNAME-sh
