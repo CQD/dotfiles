@@ -64,7 +64,8 @@ do
       wg csf http://get.sensiolabs.org/php-cs-fixer.phar
       wg psysh http://psysh.org/psysh
       wg pcs http://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
-      # todo: colordiff
+      wg icdiff https://raw.githubusercontent.com/jeffkaufman/icdiff/master/icdiff
+      wg git-cdi https://raw.githubusercontent.com/jeffkaufman/icdiff/master/git-icdiff
       break;
       ;;
     "Override")
@@ -72,7 +73,8 @@ do
       wg csf http://get.sensiolabs.org/php-cs-fixer.phar f
       wg psysh http://psysh.org/psysh f
       wg pcs http://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar f
-      # todo: colordiff
+      wg icdiff https://raw.githubusercontent.com/jeffkaufman/icdiff/master/icdiff
+      wg git-cdi https://raw.githubusercontent.com/jeffkaufman/icdiff/master/git-icdiff
       break;
       ;;
     *)
