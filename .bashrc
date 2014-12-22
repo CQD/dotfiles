@@ -28,24 +28,26 @@ function git_branch {
     if [ $ref ] ; then
         # print branch name
         local branch="${ref#refs/heads/}";
-        local Color_on='\033[0;32m'
+        local Color_on='\001\e[0;32m\002'
     else
         # print hash for detached HEAD
         local branch=$(git log --pretty=format:'%h' -n 1 2> /dev/null);
-        local Color_on='\033[0;33m'
+        local Color_on='\001\e[0;33m\002'
     fi
+
+    Color_reset="\001\e[0m\002"
 
     # print status
     if [[ "$git_status" =~ nothing\ to\ commit ]]; then
         local stat=""
     elif [[ "$git_status" =~ nothing\ added\ to\ commit\ but\ untracked\ files\ present ]]; then
-        local stat="\033[0;36m+\033[0m"
+        local stat="\001\e[0;36m\002+\001\e[0m\002"
     else
-        local stat="\033[1;31m*\033[0m"
+        local stat="\001\e[1;31m\002*\001\e[0m\002"
     fi
 
     # output
-    echo -ne "$Color_on($branch$stat$Color_on)\033[0m"
+    echo -ne "$Color_on($branch$stat$Color_on)$Color_reset"
 }
 
 #sets up the prompt color (currently a green similar to linux terminal)
