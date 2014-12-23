@@ -71,8 +71,9 @@ else
     alias ls='ls -G'
 fi
 
-alias ll='ls -al'
+alias ll='ls -l'
 alias la='ls -a'
+alias lla='ls -al'
 
 # if tmux exists, set up alias and re-attatch
 if  type tmux &> /dev/null ; then
