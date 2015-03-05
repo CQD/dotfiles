@@ -17,37 +17,17 @@ function git_branch {
         return
     fi
 
-    # do nothing if this is not a git repo
-    local git_status="`git status -unormal 2>&1`"
-    if [[ "$git_status" =~ Not\ a\ git\ repo ]]; then
+    ref=$(git symbolic-ref HEAD 2> /dev/null);
+    if [ $ref ] ; then
+        echo "("${ref#refs/heads/}")";
+        return;
+    fi
+
+    hash=$(git log --pretty=format:'%h' -n 1 2> /dev/null);
+    if [ $hash ] ; then
+        echo "["$hash"]";
         return
     fi
-
-    # print branch name or hash
-    local ref=$(git symbolic-ref HEAD 2> /dev/null);
-    if [ $ref ] ; then
-        # print branch name
-        local branch="${ref#refs/heads/}";
-        local Color_on='\001\033[0;32m\002'
-    else
-        # print hash for detached HEAD
-        local branch=$(git log --pretty=format:'%h' -n 1 2> /dev/null);
-        local Color_on='\001\033[0;33m\002'
-    fi
-
-    Color_reset="\001\033[0m\002"
-
-    # print status
-    if [[ "$git_status" =~ nothing\ to\ commit ]]; then
-        local stat=""
-    elif [[ "$git_status" =~ nothing\ added\ to\ commit\ but\ untracked\ files\ present ]]; then
-        local stat="\001\033[0;36m\002+\001\033[0m\002"
-    else
-        local stat="\001\033[1;31m\002*\001\033[0m\002"
-    fi
-
-    # output
-    echo -ne "$Color_on($branch$stat$Color_on)$Color_reset"
 }
 
 #sets up the prompt color (currently a green similar to linux terminal)
