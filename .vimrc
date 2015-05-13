@@ -29,6 +29,8 @@ set wildmenu
 set backspace=2
 set nowrap
 
+execute pathogen#infect()
+
 syntax on
 "
 " color schema
