@@ -24,6 +24,7 @@
         st = status
         sh = show
         shn = show --name-only
+        shst = show --stat
         br = branch
         co = checkout
         rb = rebase
