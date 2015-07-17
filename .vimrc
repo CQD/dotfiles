@@ -28,6 +28,7 @@ set visualbell
 set wildmenu
 set backspace=2
 set nowrap
+set t_ut=  "不要清除背景色，這樣在 tmux 裡面背景色才會正常
 
 execute pathogen#infect()
 
