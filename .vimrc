@@ -64,6 +64,7 @@ let g:syntastic_check_on_wq = 0
 " airline
 let g:airline_left_sep=''
 let g:airline_right_sep=''
+let g:airline_theme='solarized'
 
 " other
 au BufNewFile,BufRead *.go set filetype=go
