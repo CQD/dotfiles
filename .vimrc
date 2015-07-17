@@ -61,6 +61,10 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 "let g:syntastic_always_populate_loc_list = 1
 
+" airline
+let g:airline_left_sep=''
+let g:airline_right_sep=''
+
 " other
 au BufNewFile,BufRead *.go set filetype=go
 au BufNewFile,BufRead *.json setf json
