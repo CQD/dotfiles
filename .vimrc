@@ -52,6 +52,15 @@ highlight Search cterm=none ctermbg=blue
 map <tab><tab> :tabnext<CR>
 map <S-tab><S-tab> :tabprev<CR>
 
+" syntastic setting
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+"let g:syntastic_always_populate_loc_list = 1
+
 " other
 au BufNewFile,BufRead *.go set filetype=go
 au BufNewFile,BufRead *.json setf json
