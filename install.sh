@@ -64,6 +64,7 @@ do
       wg csf http://get.sensiolabs.org/php-cs-fixer.phar
       wg psysh http://psysh.org/psysh
       wg pcs http://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
+      wg pmd http://static.phpmd.org/php/latest/phpmd.phar
       wg icdiff https://raw.githubusercontent.com/jeffkaufman/icdiff/master/icdiff
       wg git-cdi https://raw.githubusercontent.com/jeffkaufman/icdiff/master/git-icdiff
       break;
@@ -72,6 +73,7 @@ do
       wg cps https://getcomposer.org/composer.phar f
       wg csf http://get.sensiolabs.org/php-cs-fixer.phar f
       wg psysh http://psysh.org/psysh f
+      wg pmd http://static.phpmd.org/php/latest/phpmd.phar f
       wg pcs http://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar f
       wg icdiff https://raw.githubusercontent.com/jeffkaufman/icdiff/master/icdiff
       wg git-cdi https://raw.githubusercontent.com/jeffkaufman/icdiff/master/git-icdiff
