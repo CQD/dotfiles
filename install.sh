@@ -48,7 +48,10 @@ cp ${BASEDIR}/.gitignore_global ~/
 # vim
 echo == Installing vim config
 cp ${BASEDIR}/.vimrc ~/
-mkdir -p ~/.vim/
+if [ -d ~/.vim ]; then
+    rm -rf ~/.vim
+fi
+mkdir ~/.vim/
 rsync -a ${BASEDIR}/.vim/ ~/.vim/
 chmod 700 ~/.vim/
 
