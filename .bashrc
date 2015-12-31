@@ -10,7 +10,11 @@ export CLICOLOR=1
 #sets up the color scheme for list
 export LSCOLORS=ExFxCxDxBxegedabagacad
 
-# for git branch display 
+###############################
+#sets up the prompt
+###############################
+
+# for git branch display
 function git_branch {
     # do nothing if there is no git
     if ! type git &> /dev/null ; then
@@ -19,26 +23,37 @@ function git_branch {
 
     ref=$(git symbolic-ref HEAD 2> /dev/null);
     if [ $ref ] ; then
-        echo "("${ref#refs/heads/}")";
+        echo "b"${ref#refs/heads/};
         return;
     fi
 
     hash=$(git log --pretty=format:'%h' -n 1 2> /dev/null);
     if [ $hash ] ; then
-        echo "["$hash"]";
+        echo "h"$hash;
         return
     fi
 }
 
-# random choose host color according to hostname
+# random choose host color according to input string
 function rand_color {
-    local r g b fgcode
-    RANDOM=$(num-from-string $1); #seed with hostname
-    r=$(($RANDOM % 5 + 1)); # 1~5
-    g=$(($RANDOM % 5 + 1)); # 1~5
-    b=$(($RANDOM % 5 + 1)); # 1~5
+    local r g b fgcode offset
+    if [ -z "$2" ]; then
+        offset=5
+    else
+        offset=$2
+    fi
+
+    r=-1; g=-1; b=-1
+
+    RANDOM=$(num-from-string $1); #seed with input string
+    until [ $(( $r + $g + $b )) -ge $offset ]; do
+        r=$(($RANDOM % 6));
+        g=$(($RANDOM % 6));
+        b=$(($RANDOM % 6));
+    done
+
     fgcode=$((16 + 36 * $r + 6 * $g + $b))
-    echo '38;5;'"$fgcode"
+    echo $fgcode
 }
 
 function num-from-string {
@@ -50,8 +65,57 @@ function num-from-string {
     echo "$out"0
 }
 
-#sets up the prompt color (currently a green similar to linux terminal)
-PS1='\[\e[0;33m\]-=[\[\e[m\] \[\e['$(rand_color `whoami`)'m\]\u\[\e[0m\]\[\e[1;30m\]@\[\e[0m\]\[\e['$(rand_color `hostname`)'m\]\h\[\e[0m\]:\[\e[0;38;5;039m\]\w\[\e[0;32m\]$(git_branch)\[\e[0m\] \[\e[0;33m]\]=-\[\e[m\]\n\$ '
+function ps_path {
+    echo '\[\e[38;5;236;48;5;069m\]\[\e[38;5;236m\] \w '
+}
+function ps_login {
+    echo '\[\e[48;5;236m\] $(ps_status)\[\e[38;5;'$(rand_color `whoami`)'m\]\u\[\e[37m\]@\[\e[38;5;'$(rand_color `hostname`)'m\]\h '
+}
+function ps_status {
+    ret=$?
+
+    local symbols job_cnt gears
+    symbols=''
+
+    # last command failed
+    if [ $ret -ne 0 ] ; then
+        symbols+='\033[38;5;160m✘ \033[22m'
+    fi
+
+    # background job running
+    job_cnt=$(jobs -l | wc -l)
+    if [ $job_cnt -gt 0 ] ; then
+        gears=$(yes '⚙' |head -n $job_cnt)
+        symbols+='\033[38;5;208m'$gears' \033[22m'
+    fi
+
+    # output
+    echo -e $symbols
+}
+function ps_git {
+    local branch prefix color
+
+    branch=$(git_branch)
+    if [ "$branch" == "" ] ; then
+        return
+    fi
+    prefix=${branch:0:1}
+    branch=${branch:1}
+    if [ "$prefix" == "b" ] ; then
+        if [ "$branch" == "master" ] ; then
+            color=106
+        elif [ "$branch" == "develop" ] ; then
+            color=114
+        else
+            color=$(rand_color $branch 6)
+        fi
+        echo -e '\033[0;30;48;5;'$color'm ⎇ '$branch' '
+    else
+        echo -e '\033[0;30;48;5;136m ➦ '$branch' '
+    fi
+}
+
+PS1=$(ps_login)$(ps_path)'$(ps_git)\[\e[0m\]\n\[\e[33m\]$\[\e[0m\] '
 
 #enables color for iTerm
 #export TERM=xterm-color
