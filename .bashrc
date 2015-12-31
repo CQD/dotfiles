@@ -33,7 +33,7 @@ function git_branch {
 # random choose host color according to hostname
 function rand_color {
     local colors len idx
-    colors=( "0;32" "0;33" "1;33" "1;34" "0;35" "0;36" "1;36" );
+    colors=( "1;31" "0;32" "0;33" "1;33" "1;34" "0;35" "0;36" "1;36" );
     RANDOM=$(num-from-string $1); #seed with hostname
     len=${#colors[@]};
     idx=$(($RANDOM % len));
