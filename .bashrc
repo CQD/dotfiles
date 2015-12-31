@@ -51,7 +51,7 @@ function num-from-string {
 }
 
 #sets up the prompt color (currently a green similar to linux terminal)
-PS1='\[\e[0;33m\]-=[\[\e[m\] \[\e['$(rand_color `whoami`)'m\]\u\[\e[0m\]@\[\e['$(rand_color `hostname`)'m\]\h\[\e[0m\]:\[\e[0;34m\]\w\[\e[0;32m\]$(git_branch)\[\e[0m\] \[\e[0;33m]\]=-\[\e[m\]\n\$ '
+PS1='\[\e[0;33m\]-=[\[\e[m\] \[\e['$(rand_color `whoami`)'m\]\u\[\e[0m\]\[\e[1;30m\]@\[\e[0m\]\[\e['$(rand_color `hostname`)'m\]\h\[\e[0m\]:\[\e[0;38;5;039m\]\w\[\e[0;32m\]$(git_branch)\[\e[0m\] \[\e[0;33m]\]=-\[\e[m\]\n\$ '
 
 #enables color for iTerm
 #export TERM=xterm-color
