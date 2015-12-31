@@ -58,11 +58,13 @@ function rand_color {
 
 function num-from-string {
     local out i a
+
+    out=1
     for ((i=0;i<${#1};++i)); do
         printf -v a "%d\n" "'${1:i:1}"
         out+=$((a%10))
     done
-    echo "$out"0
+    echo $(($out % 1000000))
 }
 
 function ps_path {
