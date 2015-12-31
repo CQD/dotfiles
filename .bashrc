@@ -66,7 +66,7 @@ function num-from-string {
 }
 
 function ps_path {
-    echo '\[\e[38;5;236;48;5;069m\]\[\e[38;5;236m\] \w '
+    echo '\[\e[48;5;69m\]\[\e[38;5;236m\] \w '
 }
 function ps_login {
     echo '\[\e[48;5;236m\] $(ps_status)\[\e[38;5;'$(rand_color `whoami`)'m\]\u\[\e[37m\]@\[\e[38;5;'$(rand_color `hostname`)'m\]\h '
