@@ -70,6 +70,7 @@ do
       wg pmd http://static.phpmd.org/php/latest/phpmd.phar
       wg icdiff https://raw.githubusercontent.com/jeffkaufman/icdiff/master/icdiff
       wg git-cdi https://raw.githubusercontent.com/jeffkaufman/icdiff/master/git-icdiff
+      wg phpbrew https://github.com/phpbrew/phpbrew/raw/master/phpbrew
       break;
       ;;
     "Override")
@@ -80,6 +81,7 @@ do
       wg pcs http://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar f
       wg icdiff https://raw.githubusercontent.com/jeffkaufman/icdiff/master/icdiff
       wg git-cdi https://raw.githubusercontent.com/jeffkaufman/icdiff/master/git-icdiff
+      wg phpbrew https://github.com/phpbrew/phpbrew/raw/master/phpbrew f
       break;
       ;;
     *)
