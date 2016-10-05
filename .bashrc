@@ -87,7 +87,7 @@ function ps_status {
     # background job running
     job_cnt=$(jobs -l | wc -l)
     if [ $job_cnt -gt 0 ] ; then
-        gears=$(yes '⚙' |head -n $job_cnt)
+        gears=$(yes '⌛' |head -n $job_cnt)
         symbols+='\033[38;5;208m'$gears' \033[22m'
     fi
 
