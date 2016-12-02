@@ -51,9 +51,6 @@ cp ${BASEDIR}/.vimrc ~/
 if [ -d ~/.vim ]; then
     rm -rf ~/.vim
 fi
-mkdir ~/.vim/
-rsync -a ${BASEDIR}/.vim/ ~/.vim/
-chmod 700 ~/.vim/
 
 # ~/bin/
 echo "== Setup ~/bin/"
