@@ -145,6 +145,8 @@ set fileformats=unix,dos,mac
 set showcmd
 set shell=/bin/sh
 
+set nowrap "" I don't like auto wrapping...
+
 " session management
 let g:session_directory = "~/.vim/session"
 let g:session_autoload = "no"
@@ -299,10 +301,10 @@ augroup vimrc-remember-cursor-position
 augroup END
 
 "" txt
-augroup vimrc-wrapping
-  autocmd!
-  autocmd BufRead,BufNewFile *.txt call s:setupWrapping()
-augroup END
+"" augroup vimrc-wrapping
+""  autocmd!
+""  autocmd BufRead,BufNewFile *.txt call s:setupWrapping()
+"" augroup END
 
 "" make/cmake
 augroup vimrc-make-cmake
