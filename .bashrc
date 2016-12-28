@@ -116,8 +116,11 @@ function ps_git {
         echo -e '\033[0;30;48;5;136m ➦ '$branch' '
     fi
 }
+function ps_time {
+    date '+[%H:%M:%S]'
+}
 
-PS1=$(ps_login)$(ps_path)'$(ps_git)\[\e[0m\]\n\[\e[33m\]$\[\e[0m\] '
+PS1=$(ps_login)$(ps_path)'$(ps_git)\[\e[0m\]\n\[\e[32m\]$(ps_time) \[\e[33m\]$\[\e[0m\] '
 
 #enables color for iTerm
 #export TERM=xterm-color
