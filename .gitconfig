@@ -1,10 +1,6 @@
 [core]
 	excludesfile = ~/.gitignore_global
 
-[user]
-        email = thecqd@gmail.com
-        name = CQD
-
 [color]
         ui = auto
         status = auto
