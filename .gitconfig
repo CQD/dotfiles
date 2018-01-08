@@ -30,6 +30,15 @@
         lg = log --graph --pretty=ol  --abbrev-commit --date=local
         lga = log --graph --pretty=ol --abbrev-commit --date=local --all
 
+        # update branch
+        uu = "!f() { \
+            remote=${1:-origin} \
+            br=${2:-$(git branch-name)}; \
+            git co $br && git pull $remote $br; \
+        }; f"
+        um = "!f() { git uu origin master; }; f"
+        us = "!f() { git uu origin staging; }; f"
+
 [branch]
         autosetuprebase = always
 
