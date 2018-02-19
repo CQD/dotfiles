@@ -163,6 +163,3 @@ fi
 # ssh-agent manangement
 [ -z "$HOSTNAME" ] && HOSTNAME=`uname -n`
 [[ -f ~/.keychain/$HOSTNAME-sh ]]  && source $HOME/.keychain/$HOSTNAME-sh
-
-# init phpbrew
-[[ -f ~/.phpbrew/bashrc ]]  && source ~/.phpbrew/bashrc
