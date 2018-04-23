@@ -31,22 +31,22 @@ BASEDIR=`dirname $0`
 umask 077
 
 #
-echo == Installing bashrc
+echo "== Installing bashrc"
 #cp ${BASEDIR}/.profile ~/
 cp ${BASEDIR}/.bash_profile ~/
 cp ${BASEDIR}/.bashrc ~/
 
 #
-echo == Installing tmux config
+echo "== Installing tmux config"
 cp ${BASEDIR}/.tmux.conf ~/
 
 #
-echo == Installing git config
+echo "== Installing git config"
 cp ${BASEDIR}/.gitconfig ~/
 cp ${BASEDIR}/.gitignore_global ~/
 
 # vim
-echo == Installing vim config
+echo "== Installing vim config"
 cp ${BASEDIR}/.vimrc ~/
 if [ -d ~/.vim ]; then
     rm -rf ~/.vim
@@ -86,4 +86,4 @@ do
 done
 
 echo
-echo == All done
+echo "== All done"
