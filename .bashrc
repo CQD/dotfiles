@@ -163,8 +163,3 @@ fi
 # ssh-agent manangement
 [ -z "$HOSTNAME" ] && HOSTNAME=`uname -n`
 [[ -f ~/.keychain/$HOSTNAME-sh ]]  && source $HOME/.keychain/$HOSTNAME-sh
-
-# if `most` exists, use as default pager
-if  type most &> /dev/null ; then
-    export PAGER=most
-fi
