@@ -163,3 +163,10 @@ fi
 # ssh-agent manangement
 [ -z "$HOSTNAME" ] && HOSTNAME=`uname -n`
 [[ -f ~/.keychain/$HOSTNAME-sh ]]  && source $HOME/.keychain/$HOSTNAME-sh
+
+function tomato {
+    time=${1:-1}
+    shift
+    text=${@:-"Time's up!"}
+    sleep $time && echo '' && osascript -e "display alert \"蕃茄鐘\" message \"$text\"" 2>&1 > /dev/null || echo "$text" &
+}
