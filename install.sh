@@ -75,7 +75,22 @@ cp ${BASEDIR}/.gitignore_global ~/
 echo "== Installing vim config"
 cp ${BASEDIR}/.vimrc ~/
 if [ -d ~/.vim ]; then
-    rm -rf ~/.vim
+    echo "~/.vim exists, remove it?"
+    PS3='Select operation: '
+    options=("Remove" "Don't remove" )
+    select opt in "${options[@]}"
+    do
+        case $opt in
+            "Remove")
+                rm -rf ~/.vim
+                echo "~/.vim removed"
+                break;
+                ;;
+            *)
+                break;
+                ;;
+        esac
+    done
 fi
 
 # ~/bin/
