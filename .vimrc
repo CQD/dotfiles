@@ -289,8 +289,12 @@ noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 noremap <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
 
 "" tree view (netrw)
-nnoremap <Leader>t :30Lex <CR>
-nnoremap <C-t> :30Lex <CR>
+nnoremap <Leader>t :Lex <CR>
+nnoremap <C-t> :Lex <CR>
+let g:netrw_banner = 0
+let g:netrw_browse_split = 3 "" open file in new tab
+let g:netrw_altv = 1
+let g:netrw_winsize = 25
 
 " syntastic
 let g:syntastic_always_populate_loc_list=1
