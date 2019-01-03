@@ -67,9 +67,9 @@ Plug 'arnaud-lb/vim-php-namespace'
 "*****************************************************************************
 
 "" Include user's extra bundle
-if filereadable(expand("~/.vimrc.local.bundles"))
-  source ~/.vimrc.local.bundles
-endif
+"" if filereadable(expand("~/.vimrc.local.bundles"))
+""   source ~/.vimrc.local.bundles
+"" endif
 
 call plug#end()
 
