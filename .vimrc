@@ -129,6 +129,7 @@ set number
 let no_buffers_menu=1
 if !exists('g:not_finish_vimplug')
   colorscheme molokai
+  hi Visual ctermbg=8 ctermfg=NONE
 endif
 
 set mousemodel=popup
