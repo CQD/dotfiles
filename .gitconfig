@@ -12,6 +12,8 @@
 [alias]
         ci = commit
         co = checkout
+        cm = checkout master
+        cs = checkout staging
         di = diff
         din = diff --name-only
         dist = diff --stat
