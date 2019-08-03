@@ -62,6 +62,8 @@ Plug 'jelera/vim-javascript-syntax'
 "" PHP Bundle
 Plug 'arnaud-lb/vim-php-namespace'
 
+" auto complete
+Plug 'zxqfl/tabnine-vim'
 
 "*****************************************************************************
 "*****************************************************************************
