@@ -116,8 +116,8 @@ do
       wg psysh http://psysh.org/psysh f
       wg pmd http://static.phpmd.org/php/latest/phpmd.phar f
       wg pcs http://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar f
-      wg icdiff https://raw.githubusercontent.com/jeffkaufman/icdiff/master/icdiff
-      wg git-cdi https://raw.githubusercontent.com/jeffkaufman/icdiff/master/git-icdiff
+      wg icdiff https://raw.githubusercontent.com/jeffkaufman/icdiff/master/icdiff f
+      wg git-cdi https://raw.githubusercontent.com/jeffkaufman/icdiff/master/git-icdiff f
       break;
       ;;
     *)
