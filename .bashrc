@@ -173,3 +173,14 @@ function tomato {
     text=${@:-"Time's up!"}
     sleep $time && echo '' && osascript -e "display alert \"蕃茄鐘\" message \"$text\"" 2>&1 > /dev/null || echo "$text" &
 }
+
+function man () {
+    case "$(type -t -- "$1")" in
+    builtin|keyword)
+        help "$1"
+        ;;
+    *)
+        command man "$@"
+        ;;
+    esac
+}
