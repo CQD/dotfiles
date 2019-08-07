@@ -145,8 +145,11 @@ alias lla='ls -al'
 
 # if tmux exists, set up alias and re-attatch
 if  type tmux &> /dev/null ; then
-    alias ta='tmux -u attach'
+    alias ta='tmux attach'
 fi
+
+[ -n "$TMUX" ] && export TERM=screen-256color # tmux matches screen instead of xterm
+                                              # https://superuser.com/questions/424086
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
