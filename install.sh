@@ -18,7 +18,7 @@ function wg {
     fi
 
     echo Installing "$file_name" from "$remote_url"
-    wget -q "$remote_url" -O $local_path
+    curl -s -o "$local_path" "$remote_url"
 
     chmod +x $local_path
 }
