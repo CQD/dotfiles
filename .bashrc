@@ -184,6 +184,9 @@ fi
 [ -z "$HOSTNAME" ] && HOSTNAME=`uname -n`
 [[ -f ~/.keychain/$HOSTNAME-sh ]]  && source $HOME/.keychain/$HOSTNAME-sh
 
+# add ~/bin/ to path
+PATH=$PATH:~/bin
+
 function tomato {
     time=${1:-1}
     shift
