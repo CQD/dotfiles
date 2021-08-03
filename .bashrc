@@ -21,15 +21,24 @@ function git_branch {
         return
     fi
 
+    # do nothing if not git repo
+    if [ "" == "$(git rev-parse --git-dir 2> /dev/null)" ] ; then
+        return
+    fi
+
+    if [ -z "$NO_GIT_STATUS" ] && [ ! "" == "$(git status -s)" ] ; then
+        flag='!'
+    fi
+
     ref=$(git symbolic-ref HEAD 2> /dev/null);
     if [ $ref ] ; then
-        echo "b"${ref#refs/heads/};
+        echo "b ${ref#refs/heads/} $flag";
         return;
     fi
 
     hash=$(git log --pretty=format:'%h' -n 1 2> /dev/null);
     if [ $hash ] ; then
-        echo "h"$hash;
+        echo "h $hash $flag";
         return
     fi
 }
@@ -97,12 +106,16 @@ function ps_status {
 function ps_git {
     local branch prefix color
 
-    branch=$(git_branch)
-    if [ "$branch" == "" ] ; then
+    git_info=$(git_branch)
+    if [ "$git_info" == "" ] ; then
         return
     fi
-    prefix=${branch:0:1}
-    branch=${branch:1}
+
+    git_info=( $git_info )
+    prefix=${git_info[0]}
+    branch=${git_info[1]}
+    flag=${git_info[2]}
+
     if [ "$prefix" == "b" ] ; then
         if [ "$branch" == "master" ] ; then
             color=106
@@ -111,9 +124,13 @@ function ps_git {
         else
             color=$(rand_color $branch 6)
         fi
-        echo -e '\033[0;30;48;5;'$color'm ⎇ '$branch' '
+        echo -ne '\033[0;30;48;5;'$color'm ⎇ '$branch' '
     else
-        echo -e '\033[0;30;48;5;136m ➦ '$branch' '
+        echo -ne '\033[0;30;48;5;136m ➦ '$branch' '
+    fi
+
+    if [ ! "" == "$flag" ] ; then
+     echo -e '\033[0;30;45m '$flag' '
     fi
 }
 function ps_time {
