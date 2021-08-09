@@ -204,3 +204,14 @@ function man () {
         ;;
     esac
 }
+
+# Docker related alias
+alias dp='docker-compose'
+
+dps() {
+    docker-compose exec "$1" /bin/bash
+}
+
+dpe() {
+    docker-compose exec $@
+}
