@@ -168,6 +168,12 @@ fi
 [ -n "$TMUX" ] && export TERM=screen-256color # tmux matches screen instead of xterm
                                               # https://superuser.com/questions/424086
 
+# Hack for tmux agent forwarding
+fixssh() {
+    eval $(tmux show-env -s |grep '^SSH_')
+}
+
+
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
