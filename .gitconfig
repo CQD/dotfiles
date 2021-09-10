@@ -11,6 +11,7 @@
 
 [alias]
         ci = commit
+        amend = commit --amend --no-edit
         co = checkout
         cm = checkout master
         cs = checkout staging
