@@ -53,3 +53,12 @@
 
 [pretty]
         ol = format:%Cred%h%Creset -%C(yellow)%d%Creset %s %C(bold black)- %cn %Creset%Cgreen(%ar)%Creset
+
+[init]
+	defaultBranch = master
+
+[gpg]
+    program = gpg
+
+[includeIf "gitdir:~/work-repo/"]
+    path = ~/work-repo/.gitconfig
