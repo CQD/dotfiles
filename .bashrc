@@ -215,9 +215,9 @@ function man () {
 alias dp='docker-compose'
 
 dps() {
-    docker-compose exec "$1" /bin/bash
+    nice -n 19 docker-compose exec "$1" /bin/bash
 }
 
 dpe() {
-    docker-compose exec $@
+    nice -n 19 docker-compose exec $@
 }
