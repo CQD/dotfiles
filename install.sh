@@ -8,10 +8,6 @@ function wg {
 
     local_path=~/bin/$file_name
 
-    if [ ! -d ~/bin ]; then
-        mkdir ~/bin
-    fi
-
     if [ "$is_force" != 'f' ] && [ -f "$local_path" ]; then
         echo Skipping "$file_name"
         return;
@@ -95,6 +91,11 @@ fi
 
 # ~/bin/
 echo "== Setup ~/bin/"
+
+if [ ! -d ~/bin ]; then
+    mkdir ~/bin
+fi
+
 PS3='Select operation: '
 options=("Setup" "Override" "Skip" )
 select opt in "${options[@]}"
@@ -109,6 +110,7 @@ do
       wg icdiff https://raw.githubusercontent.com/jeffkaufman/icdiff/master/icdiff
       wg git-cdi https://raw.githubusercontent.com/jeffkaufman/icdiff/master/git-icdiff
       wg keychain https://raw.githubusercontent.com/funtoo/keychain/master/keychain
+      cp -n bin/git-fr ~/bin/git-fr
       break;
       ;;
     "Override")
@@ -120,6 +122,7 @@ do
       wg icdiff https://raw.githubusercontent.com/jeffkaufman/icdiff/master/icdiff f
       wg git-cdi https://raw.githubusercontent.com/jeffkaufman/icdiff/master/git-icdiff f
       wg keychain https://raw.githubusercontent.com/funtoo/keychain/master/keychain f
+      cp bin/git-fr ~/bin/git-fr
       break;
       ;;
     *)
