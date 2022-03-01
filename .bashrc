@@ -1,17 +1,21 @@
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
-# change default editor
+###############################
+# Basics
+###############################
+
 export EDITOR=vim
-
-#enables color in the terminal bash shell
 export CLICOLOR=1
-
-#sets up the color scheme for list
 export LSCOLORS=ExFxCxDxBxegedabagacad
+export TERM=xterm-256color
+
+[ -n "$TMUX" ] && export TERM=screen-256color # tmux matches screen instead of xterm
+                                              # https://superuser.com/questions/424086
+PATH=$PATH:~/bin
 
 ###############################
-#sets up the prompt
+# Prompt styling
 ###############################
 
 # for git branch display
@@ -139,9 +143,29 @@ function ps_time {
 
 PS1=$(ps_login)$(ps_path)'$(ps_git)\[\e[0m\]\n\[\e[32m\]$(ps_time) \[\e[33m\]$\[\e[0m\] '
 
-#enables color for iTerm
-#export TERM=xterm-color
-export TERM=xterm-256color
+###############################
+# Run scripts
+###############################
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+    . /etc/bash_completion
+fi
+
+# include machine depending settings that not to be included in dotfile repo
+if [ -f ~/.bashrc_local ] ; then
+    source ~/.bashrc_local
+fi
+
+# ssh-agent manangement
+[ -z "$HOSTNAME" ] && HOSTNAME=`uname -n`
+[[ -f ~/.keychain/$HOSTNAME-sh ]]  && source $HOME/.keychain/$HOSTNAME-sh
+
+###############################
+# alias
+###############################
 
 #sets up proper alias commands when called
 if [ "$(uname)" = "Linux" ]; then
@@ -160,39 +184,38 @@ alias ll='ls -l'
 alias la='ls -a'
 alias lla='ls -al'
 
-# if tmux exists, set up alias and re-attatch
-if  type tmux &> /dev/null ; then
-    alias ta='tmux attach'
-fi
+# tmux alias
+alias ta='tmux attach'
 
-[ -n "$TMUX" ] && export TERM=screen-256color # tmux matches screen instead of xterm
-                                              # https://superuser.com/questions/424086
+# Docker alias
+alias dp='docker-compose'
+
+dps() {
+    nice -n 19 docker-compose exec "$1" /bin/bash
+}
+
+dpe() {
+    nice -n 19 docker-compose exec $@
+}
+
+# pyrhon alias
+venv() {
+    if type python3 &> /dev/null ; then
+        python3 -m venv $@
+    elif type python &> /dev/null; then
+        python -m venv $@
+    else
+        echo "Python not detected!"
+        exit -1
+    fi
+}
 
 # Hack for tmux agent forwarding
 fixssh() {
     eval $(tmux show-env -s |grep '^SSH_')
 }
 
-
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-    . /etc/bash_completion
-fi
-
-# include machine depending settings that not to be included in dotfile repo
-if [ -f ~/.bashrc_local ] ; then
-    source ~/.bashrc_local
-fi
-
-# ssh-agent manangement
-[ -z "$HOSTNAME" ] && HOSTNAME=`uname -n`
-[[ -f ~/.keychain/$HOSTNAME-sh ]]  && source $HOME/.keychain/$HOSTNAME-sh
-
-# add ~/bin/ to path
-PATH=$PATH:~/bin
-
+# misc
 function tomato {
     time=${1:-1}
     shift
@@ -209,27 +232,4 @@ function man () {
         command man "$@"
         ;;
     esac
-}
-
-# Docker related alias
-alias dp='docker-compose'
-
-dps() {
-    nice -n 19 docker-compose exec "$1" /bin/bash
-}
-
-dpe() {
-    nice -n 19 docker-compose exec $@
-}
-
-# pyrhon related alias
-venv() {
-    if type python3 &> /dev/null ; then
-        python3 -m venv $@
-    elif type python &> /dev/null; then
-        python -m venv $@
-    else
-        echo "Python not detected!"
-        exit -1
-    fi
 }
