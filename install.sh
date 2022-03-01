@@ -92,9 +92,7 @@ fi
 # ~/bin/
 echo "== Setup ~/bin/"
 
-if [ ! -d ~/bin ]; then
-    mkdir ~/bin
-fi
+mkdir -p ~/bin
 
 PS3='Select operation: '
 options=("Setup" "Override" "Skip" )
@@ -103,10 +101,7 @@ do
   case $opt in
     "Setup")
       wg cps https://getcomposer.org/composer.phar
-      wg csf http://get.sensiolabs.org/php-cs-fixer.phar
-      wg psysh http://psysh.org/psysh
-      wg pcs http://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
-      wg pmd http://static.phpmd.org/php/latest/phpmd.phar
+      wg psysh https://psysh.org/psysh
       wg icdiff https://raw.githubusercontent.com/jeffkaufman/icdiff/master/icdiff
       wg git-cdi https://raw.githubusercontent.com/jeffkaufman/icdiff/master/git-icdiff
       wg keychain https://raw.githubusercontent.com/funtoo/keychain/master/keychain
@@ -115,10 +110,7 @@ do
       ;;
     "Override")
       wg cps https://getcomposer.org/composer.phar f
-      wg csf http://get.sensiolabs.org/php-cs-fixer.phar f
-      wg psysh http://psysh.org/psysh f
-      wg pmd http://static.phpmd.org/php/latest/phpmd.phar f
-      wg pcs http://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar f
+      wg psysh https://psysh.org/psysh f
       wg icdiff https://raw.githubusercontent.com/jeffkaufman/icdiff/master/icdiff f
       wg git-cdi https://raw.githubusercontent.com/jeffkaufman/icdiff/master/git-icdiff f
       wg keychain https://raw.githubusercontent.com/funtoo/keychain/master/keychain f
