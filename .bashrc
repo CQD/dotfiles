@@ -221,3 +221,15 @@ dps() {
 dpe() {
     nice -n 19 docker-compose exec $@
 }
+
+# pyrhon related alias
+venv() {
+    if type python3 &> /dev/null ; then
+        python3 -m venv $@
+    elif type python &> /dev/null; then
+        python -m venv $@
+    else
+        echo "Python not detected!"
+        exit -1
+    fi
+}
