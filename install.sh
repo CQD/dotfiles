@@ -105,7 +105,6 @@ do
       wg icdiff https://raw.githubusercontent.com/jeffkaufman/icdiff/master/icdiff
       wg git-cdi https://raw.githubusercontent.com/jeffkaufman/icdiff/master/git-icdiff
       wg keychain https://raw.githubusercontent.com/funtoo/keychain/master/keychain
-      cp -n bin/git-fr ~/bin/git-fr
       break;
       ;;
     "Override")
@@ -114,13 +113,13 @@ do
       wg icdiff https://raw.githubusercontent.com/jeffkaufman/icdiff/master/icdiff f
       wg git-cdi https://raw.githubusercontent.com/jeffkaufman/icdiff/master/git-icdiff f
       wg keychain https://raw.githubusercontent.com/funtoo/keychain/master/keychain f
-      cp bin/git-fr ~/bin/git-fr
       break;
       ;;
     *)
       break;
       ;;
   esac
+  cp -R bin/ ~/bin/
 done
 
 echo

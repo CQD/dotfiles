@@ -1,0 +1,125 @@
+#!/bin/bash
+
+VENV_PRESET=$VIRTUAL_ENV
+
+function main() {
+    action="${1:-"help"}"
+
+    case "$action" in
+        help)
+            action_help
+            ;;
+        *)
+            export venv_path=$(find_venv_path)
+            if [ "" = "$venv_path" ]; then
+                kill_me "Can not proceed without venv folder!"
+            fi
+
+            soft_activate
+            action_pip $@
+            ;;
+    esac
+
+    say "All done"
+}
+
+#########################################
+
+function action_help() {
+    echo "help TBD...";
+    exit;
+}
+
+function action_pip() {
+    pip $@
+}
+
+#########################################
+
+function soft_activate() {
+    env > foo
+    if [ "" = "$VENV_PRESET" ]; then
+        say Activate venv
+        source $venv_path/bin/activate
+        say ok
+    fi
+}
+
+function kill_me() {
+    msg=$@
+    echo -e "${RED}$(date +"%H:%M:%S") ERR |${NC}" "${msg:-"Some error happens"}" >&2
+    exit 1
+}
+
+function say() {
+    msg=$@
+    echo -e "${GREEN}$(date +"%H:%M:%S") NOR |${NC}" "${msg:-^_^}" >&2
+}
+
+function find_venv_path() {
+    if [ "" != "$VENV_PRESET" ]; then
+        say "Using venv that is already active (${GREEN}${VENV_PRESET}${NC})"
+        echo "$VENV_PRESET"
+        return
+    fi
+
+    curr_wd=$(pwd)
+    pos="$curr_wd"
+
+    prev_pos="____"
+    while [ "$prev_pos" != "$pos" ] ; do
+        prev_pos=$pos
+
+        venv_path="$pos/venv"
+        if [ -d "$venv_path" ]; then
+            say "Using venv path: $venv_path"
+            echo "$venv_path"
+            return
+        fi
+
+        pos=$(dirname "$pos")
+    done
+
+    venv_path="$curr_wd/venv"
+
+    while true; do
+        read -p "Venv not found, init venv folder at $venv_path? (yes/no) " yn
+        case $yn in
+            [Yy]* ) break;;
+            [Nn]* ) return;;
+            * ) echo "Please answer yes or no.";;
+        esac
+    done
+
+    init_venv "$venv_path"
+    echo "$venv_path"
+}
+
+function init_venv() {
+    venv_path=$1
+
+    if type python3 > /dev/null ; then
+        python_cmd="python3"
+    else
+        python_cmd="python"
+    fi
+
+    say "Initing venv at ${GREEN}${venv_path}${NC} with ${GREEN}${python_cmd}${NC} command..."
+
+    $python_cmd -m venv "$venv_path" > /dev/null || kill_me "Could not init venv folder!"
+
+    say "venv inited successfully"
+}
+
+#########################################
+
+RED="\033[0;31m"
+GREEN="\033[0;32m"
+BROWN="\033[0;33m"
+NC="\033[0m"
+
+set -e
+
+#########################################
+
+main $@
