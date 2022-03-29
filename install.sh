@@ -104,7 +104,6 @@ do
       wg psysh https://psysh.org/psysh
       wg icdiff https://raw.githubusercontent.com/jeffkaufman/icdiff/master/icdiff
       wg git-cdi https://raw.githubusercontent.com/jeffkaufman/icdiff/master/git-icdiff
-      wg keychain https://raw.githubusercontent.com/funtoo/keychain/master/keychain
       break;
       ;;
     "Override")
@@ -112,7 +111,6 @@ do
       wg psysh https://psysh.org/psysh f
       wg icdiff https://raw.githubusercontent.com/jeffkaufman/icdiff/master/icdiff f
       wg git-cdi https://raw.githubusercontent.com/jeffkaufman/icdiff/master/git-icdiff f
-      wg keychain https://raw.githubusercontent.com/funtoo/keychain/master/keychain f
       break;
       ;;
     *)

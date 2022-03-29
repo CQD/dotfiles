@@ -160,8 +160,14 @@ if [ -f ~/.bashrc_local ] ; then
 fi
 
 # ssh-agent manangement
-[ -z "$HOSTNAME" ] && HOSTNAME=`uname -n`
-[[ -f ~/.keychain/$HOSTNAME-sh ]]  && source $HOME/.keychain/$HOSTNAME-sh
+if [ "" == "$SSH_AUTH_SOCK" ]; then
+    if ! type -p ssh-agent; then
+        echo "Can not init ssh-agent, command not available!"
+    else
+        echo "Initing ssh-agent"
+        eval $(ssh-agent)
+    fi
+fi
 
 ###############################
 # alias
