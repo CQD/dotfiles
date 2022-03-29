@@ -191,7 +191,8 @@ alias ta='tmux attach'
 alias dp='docker-compose'
 
 dps() {
-    nice -n 19 docker-compose exec "$1" /bin/bash
+    nice -n 19 docker-compose exec "$1" /bin/bash \
+    || nice -n 19 docker-compose exec "$1" /bin/sh
 }
 
 dpe() {
