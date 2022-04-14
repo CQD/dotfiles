@@ -30,6 +30,7 @@
         br = branch
         co = checkout
         rb = rebase
+        rbi = rebase --interactive
         rbc = rebase --continue
         rba = rebase --abort
         cp = cherry-pick
