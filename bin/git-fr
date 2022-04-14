@@ -1,8 +1,0 @@
-#!/bin/sh
-
-branch=$(git rev-parse --abbrev-ref HEAD)
-
-echo Fetch and reset to origin/$branch...
-
-git fetch origin $branch
-git reset origin/$branch --hard

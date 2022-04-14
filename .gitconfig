@@ -45,6 +45,13 @@
         um = "!f() { git uu origin master; }; f"
         us = "!f() { git uu origin staging; }; f"
 
+        fr = "!f(){ \
+            branch=$(git rev-parse --abbrev-ref HEAD); \
+            echo Fetch and reset to origin/$branch...; \
+            git fetch origin $branch; \
+            git reset origin/$branch --hard; \
+        }; f"
+
 [branch]
         autosetuprebase = always
 
