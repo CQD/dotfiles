@@ -13,8 +13,22 @@
 .DS_Store
 
 ##
-# Eclipse project file
+# IDE config / project files
 ##
+
+# Eclipise
 .buildpath
 .project
 .settings/
+
+.vscode      # visual studio code
+.idea        # JetBrains
+
+##
+# python
+##
+
+venv/        # pvc installed venv
+*.pyc
+.mypy_cache/
+.coverage    # pytest coverage
