@@ -26,7 +26,11 @@ function main() {
 #########################################
 
 function action_help() {
-    echo "help TBD...";
+    echo "Use me like pip (ex: pvc install).";
+    echo "Will pass all args to pip.";
+    echo
+    echo "If virtual env exists, use current active venv.";
+    echo "If virtual env not exists, will create venv/ in current folder";
     exit;
 }
 
