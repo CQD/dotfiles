@@ -41,7 +41,6 @@ function action_pip() {
 #########################################
 
 function soft_activate() {
-    env > foo
     if [ "" = "$VENV_PRESET" ]; then
         say Activate venv
         source $venv_path/bin/activate
