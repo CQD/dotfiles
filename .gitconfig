@@ -53,6 +53,14 @@
             git reset origin/$branch --hard; \
         }; f"
 
+        fc = "!f(){ \
+            branch=${1}; \
+            if [ "" == "$branch" ]; then echo Branch name required; return -1; fi \
+            echo Fetch and checkout to origin/$branch...; \
+            git fetch origin $branch; \
+            git checkout $branch; \
+        }; f"
+
 [branch]
         autosetuprebase = always
 
