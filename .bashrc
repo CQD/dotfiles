@@ -223,7 +223,7 @@ fixssh() {
 }
 
 # misc
-function man () {
+man () {
     case "$(type -t -- "$1")" in
     builtin|keyword)
         help "$1"
@@ -232,4 +232,12 @@ function man () {
         command man "$@"
         ;;
     esac
+}
+
+cdp() {
+    TTT=$(pwd)
+    while ! [ -d .git ]; do
+        cd ..
+    done
+    OLDPWD=$TTT
 }
