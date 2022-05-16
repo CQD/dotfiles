@@ -205,7 +205,7 @@ dpe() {
     nice -n 19 docker-compose exec $@
 }
 
-# pyrhon alias
+# python alias
 venv() {
     if type python3 &> /dev/null ; then
         python3 -m venv $@
