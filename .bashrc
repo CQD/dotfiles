@@ -194,15 +194,14 @@ alias lla='ls -al'
 alias ta='tmux attach'
 
 # Docker alias
-alias dp='docker compose'
+alias dp='nice -n 19 docker compose'
 
 dps() {
-    nice -n 19 dp exec "$1" /bin/bash \
-    || nice -n 19 dp exec "$1" /bin/sh
+    dp exec "$1" /bin/bash || dp exec "$1" /bin/sh
 }
 
 dpe() {
-    nice -n 19 dp exec $@
+    dp exec $@
 }
 
 # python alias
