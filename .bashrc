@@ -238,5 +238,8 @@ cdp() {
     while ! [ -d .git ]; do
         cd ..
     done
+    if ! [ "" == "$1" ]; then
+        cd $1
+    fi
     OLDPWD=$TTT
 }
