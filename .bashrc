@@ -219,7 +219,11 @@ venv() {
 # Hack for tmux agent forwarding
 fixssh() {
     eval $(tmux show-env -s |grep '^SSH_')
+    echo SSH_* envs re-evaluated.
 }
+if  [ "$TMUX" ]; then
+    fixssh
+fi
 
 # misc
 man () {
