@@ -1,0 +1,15 @@
+#!/usr/bin/env php
+<?php
+if (count($argv) > 1) {
+    foreach ($argv as $idx => $word) {
+        if ($idx > 0) {
+            echo urldecode($word);
+        }
+    }
+    echo "\n";
+    return;
+}
+
+while ($line = fgets(STDIN)) {
+    echo urldecode($line);
+}
