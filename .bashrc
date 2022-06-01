@@ -84,7 +84,10 @@ function ps_path {
     echo '\[\e[48;5;75m\]\[\e[30m\] \w '
 }
 function ps_login {
-    echo '\[\e[48;5;235m\] $(ps_status)\[\e[38;5;'$(rand_color $USER)'m\]\u\[\e[37m\]@\[\e[38;5;'$(rand_color $PS_HOSTNAME)'m\]${PS_HOSTNAME:-${HOSTNAME/.lan/}} '
+    _HOSTNAME=${PS_HOSTNAME:-$HOSTNAME}
+    _HOSTNAME=${_HOSTNAME/.lan/}
+    _HOSTNAME=${_HOSTNAME/.compute.internal/.aws}
+    echo '\[\e[48;5;235m\] $(ps_status)\[\e[38;5;'$(rand_color $USER)'m\]\u\[\e[37m\]@\[\e[38;5;'$(rand_color $_PS_HOSTNAME)'m\]${PS_HOSTNAME:-'$_HOSTNAME'} '
 }
 function ps_status {
     ret=$?
