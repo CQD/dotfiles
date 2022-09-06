@@ -117,8 +117,8 @@ do
       break;
       ;;
   esac
-  cp -R bin/ ~/bin/
 done
+cp -R bin/ ~/bin/ # always overide my scripts
 
 echo
 echo "== All done"
