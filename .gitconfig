@@ -13,7 +13,6 @@
         ci = commit
         amend = commit --amend --no-edit
         co = checkout
-        cm = checkout master
         cs = checkout staging
         di = diff
         din = diff --name-only
@@ -59,6 +58,12 @@
             echo Fetch and checkout to origin/$branch...; \
             git fetch origin $branch; \
             git checkout $branch; \
+        }; f"
+
+        cm = "!f(){ \
+            git checkout master || \
+            git checkout main || \
+            echo 'Branch master/main not exist' && false ; \
         }; f"
 
 [branch]
