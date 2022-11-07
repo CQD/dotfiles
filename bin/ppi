@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -e
+
+PIPFILE=${1:-Pipfile.lock}
+
+if [ "--help" ==  "$PIPFILE" ] || [ "help" ==  "$PIPFILE" ] ; then
+    echo "以 pip 安裝 Pipfile.lock 裡面指定的套件"
+    echo "用法： ppi [path/to/Pipfile.lock]"
+    echo "路徑省略時，預設使用工作目錄裡的 Pipfile.lock"
+    exit;
+fi
+
+if [ ! -f "$PIPFILE" ]; then
+    echo "$PIPFILE 不存在，無法安裝"
+    exit -1;
+fi
+
+python3 -m site
+python3 -m pip install -r <(jq -r '.default|to_entries[]| "\(.key)\(.value.version)"' $PIPFILE)
