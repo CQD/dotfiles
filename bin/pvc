@@ -35,7 +35,7 @@ function action_help() {
 }
 
 function action_pip() {
-    pip $@
+    python -m pip $@
 }
 
 #########################################
