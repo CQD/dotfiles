@@ -227,7 +227,7 @@ venv() {
     elif type python &> /dev/null; then
         python -m venv $@
     else
-        echo "Python not detected!"
+        echo "找不到 python!"
         exit -1
     fi
 }
@@ -235,10 +235,18 @@ venv() {
 av() {
     base=${1:-venv}
     if [ ! -f $base/bin/activate ]; then
-        echo "Creating virtual env at $base..."
+        echo "把 virtual env 建立到 $base..."
         venv $base
     fi
     . $base/bin/activate
+}
+
+dv() {
+    if [ "" == "$VIRTUAL_ENV" ] ; then
+        echo "沒有啟動中的 virtual env"
+        return
+    fi
+    deactivate
 }
 
 # Hack for tmux agent forwarding
