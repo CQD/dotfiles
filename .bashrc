@@ -222,6 +222,15 @@ venv() {
     fi
 }
 
+av() {
+    base=${1:-venv}
+    if [ ! -f $base/bin/activate ]; then
+        echo "Creating virtual env at $base..."
+        venv $base
+    fi
+    . $base/bin/activate
+}
+
 # Hack for tmux agent forwarding
 fixssh() {
     eval $(tmux show-env -s |grep '^SSH_')
