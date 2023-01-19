@@ -18,33 +18,35 @@ PATH=$PATH:~/bin
 # Prompt styling
 ###############################
 
-# for git branch display
+# print git branch status
 function git_branch {
-    # do nothing if there is no git
-    if ! type git &> /dev/null ; then
+    # do nothing if
+    # - no git
+    # - not git repo
+    if ! type git &> /dev/null \
+       || [ ! -d .git ] \
+    ; then
         return
     fi
 
-    # do nothing if not git repo
-    if [ "" == "$(git rev-parse --git-dir 2> /dev/null)" ] ; then
-        return
+    # modified files
+    if [ -z "$NO_GIT_STATUS" ] ; then
+        st=$(git status -s)
+        flags_s=$(echo "$st" | cut -b 1-1 | tr -d "\n" | tr -d "?" )
+        flags_ns=$(echo "$st" | cut -b 2-2 | tr -d "\n" )
     fi
 
-    if [ -z "$NO_GIT_STATUS" ] && [ ! "" == "$(git status -s)" ] ; then
-        flag='!'
+    # ref name, or commit hash
+    head_type='b' # branch
+    ref=$(git symbolic-ref --short HEAD 2> /dev/null);
+
+    if [ "" == "$ref" ] ; then
+        head_type='h' # hash
+        ref=$(git log --pretty=format:'%h' -n 1 2> /dev/null);
     fi
 
-    ref=$(git symbolic-ref HEAD 2> /dev/null);
-    if [ $ref ] ; then
-        echo "b ${ref#refs/heads/} $flag";
-        return;
-    fi
-
-    hash=$(git log --pretty=format:'%h' -n 1 2> /dev/null);
-    if [ $hash ] ; then
-        echo "h $hash $flag";
-        return
-    fi
+    # print result
+    echo "$head_type $ref _$flags_s _$flags_ns";
 }
 
 # random choose host color according to input string
@@ -121,7 +123,8 @@ function ps_git {
     git_info=( $git_info )
     prefix=${git_info[0]}
     branch=${git_info[1]}
-    flag=${git_info[2]}
+    flag_staged=${git_info[2]/_/}
+    flag_not_staged=${git_info[3]/_/}
 
     if [ "$prefix" == "b" ] ; then
         if [ "$branch" == "master" ] ; then
@@ -136,9 +139,16 @@ function ps_git {
         echo -ne '\033[0;30;48;5;136m ➦ '$branch' '
     fi
 
-    if [ ! "" == "$flag" ] ; then
-     echo -e '\033[0;30;45m '$flag' '
+    echo -ne '\033[m'
+
+    if [ ! "" == "$flag_staged" ] ; then
+      echo -ne '\033[0;43;30m' $flag_staged' '
     fi
+    if [ ! "" == "$flag_not_staged" ] ; then
+      echo -ne '\033[1;41;37m' $flag_not_staged' '
+    fi
+
+    echo -e '\033[m'
 }
 function ps_time {
     date '+[%H:%M:%S]'
