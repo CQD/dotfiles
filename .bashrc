@@ -24,7 +24,7 @@ function git_branch {
     # - no git
     # - not git repo
     if ! type git &> /dev/null \
-       || [ ! -d .git ] \
+       || ! git rev-parse --is-inside-work-tree &> /dev/null \
     ; then
         return
     fi
