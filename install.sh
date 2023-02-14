@@ -79,30 +79,11 @@ echo "== Setup ~/bin/"
 
 mkdir -p ~/bin
 
-PS3='Select operation: '
-options=("Setup" "Override" "Skip" )
-select opt in "${options[@]}"
-do
-  case $opt in
-    "Setup")
-      wg cps https://getcomposer.org/composer.phar
-      wg psysh https://psysh.org/psysh
-      wg icdiff https://raw.githubusercontent.com/jeffkaufman/icdiff/master/icdiff
-      wg git-cdi https://raw.githubusercontent.com/jeffkaufman/icdiff/master/git-icdiff
-      break;
-      ;;
-    "Override")
-      wg cps https://getcomposer.org/composer.phar f
-      wg psysh https://psysh.org/psysh f
-      wg icdiff https://raw.githubusercontent.com/jeffkaufman/icdiff/master/icdiff f
-      wg git-cdi https://raw.githubusercontent.com/jeffkaufman/icdiff/master/git-icdiff f
-      break;
-      ;;
-    *)
-      break;
-      ;;
-  esac
-done
+wg cps https://getcomposer.org/composer.phar f
+wg psysh https://psysh.org/psysh f
+wg icdiff https://raw.githubusercontent.com/jeffkaufman/icdiff/master/icdiff f
+wg git-cdi https://raw.githubusercontent.com/jeffkaufman/icdiff/master/git-icdiff f
+
 cp -R bin/ ~/bin/ # always overide my scripts
 
 echo
