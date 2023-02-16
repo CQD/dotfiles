@@ -28,7 +28,6 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
 Plug 'sheerun/vim-polyglot'
 Plug 'vim-scripts/CSApprox'
-Plug 'bronson/vim-trailing-whitespace'
 Plug 'Raimondi/delimitMate'
 Plug 'scrooloose/syntastic'
 Plug 'Yggdroot/indentLine'
@@ -118,6 +117,16 @@ set showcmd
 set shell=/bin/sh
 
 set nowrap "" I don't like auto wrapping...
+
+"" 顯示 tab 跟行尾空白
+set list
+set listchars=tab:→\ ,trail:·
+
+"" 凸顯行尾空白
+"" https://vim.fandom.com/wiki/Highlight_unwanted_spaces#Highlighting_with_the_match_command
+highlight ExtraWhitespace ctermbg=red guibg=red
+autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+\%#\@<!$/
 
 "*****************************************************************************
 "" Visual Settings
