@@ -34,8 +34,8 @@
         rbc = rebase --continue
         rba = rebase --abort
         cp = cherry-pick
-        lg = log --graph --pretty=ol  --abbrev-commit --date=local
-        lga = log --graph --pretty=ol --abbrev-commit --date=local --all
+        lg  = log --graph --pretty=ol --abbrev-commit --date=local --no-show-signature
+        lga = log --graph --pretty=ol --abbrev-commit --date=local --no-show-signature --all
         sm = submodule update
 
         # update branch
@@ -75,6 +75,9 @@
 
 [pretty]
         ol = format:%Cred%h%Creset -%C(yellow)%d%Creset %s %C(bold black)- %cn %Creset%Cgreen(%ar)%Creset
+
+[log]
+    showSignature=true
 
 [init]
     defaultBranch = master
