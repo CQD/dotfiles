@@ -2,6 +2,8 @@
 
 set -e
 
+BASEDIR=$(dirname $0)
+
 ############################################################
 function wg {
     file_name=$1;
@@ -15,53 +17,67 @@ function wg {
         return;
     fi
 
-    echo Installing "$file_name" from "$remote_url"
+    echo 下載 "$file_name" （"$remote_url"）
     curl -s -o "$local_path" "$remote_url"
 
     chmod +x $local_path
 }
 
+function mkln {
+    src=$1
+    dst=$2
+
+    if [ ! -f "$src" ]; then
+        echo $src 不存在！
+        false
+    fi
+
+    if [ -f ~/$dst ] || [ -L ~/$dst ]; then
+        echo "取代 $dst"
+        rm ~/$dst
+    else
+        echo "建立 $dst"
+    fi
+
+    ln -s $(realpath $src) ~/$dst
+}
+
+function mkdln {
+    mkln $BASEDIR/conf/$1 .$1
+}
+
 ############################################################
 
-BASEDIR=`dirname $0`
-
-#
 umask 077
 
-#
-echo "== Installing bashrc"
-#cp ${BASEDIR}/.profile ~/
-cp ${BASEDIR}/.bash_profile ~/
-cp ${BASEDIR}/.bashrc ~/
+echo "== Config files =="
+mkdln bash_profile
+mkdln bashrc
+mkdln tmux.conf
+mkdln gitconfig
+mkdln gitignore_global
+mkdln vimrc
 
-#
-echo "== Installing tmux config"
-cp ${BASEDIR}/.tmux.conf ~/
+touch -a ~/.bashrc_local
+touch -a ~/.gitconfig_local
 
-#
-echo "== Installing git config"
-cp ${BASEDIR}/.gitconfig ~/
-cp ${BASEDIR}/.gitignore_global ~/
-touch ~/.gitconfig_local
-
-# vim
-echo "== Installing vim config"
-cp ${BASEDIR}/.vimrc ~/
 if [ -d ~/.vim ]; then
     echo "~/.vim 已存在，必要時手動移除之"
 fi
 
-# ~/bin/
-echo "== Setup ~/bin/"
 
-mkdir -p ~/bin
+echo "== ~/bin/ =="
 
-wg cps https://getcomposer.org/composer.phar f
-wg psysh https://psysh.org/psysh f
-wg icdiff https://raw.githubusercontent.com/jeffkaufman/icdiff/master/icdiff f
-wg git-cdi https://raw.githubusercontent.com/jeffkaufman/icdiff/master/git-icdiff f
+mkdir -p ~/bin/
 
-cp -R bin/ ~/bin/ # always overide my scripts
+for src in $(ls $BASEDIR/bin ); do
+    mkln $BASEDIR/bin/$src bin/$src
+done
+wg cps        https://getcomposer.org/composer.phar f
+wg psysh      https://psysh.org/psysh f
+wg icdiff     https://raw.githubusercontent.com/jeffkaufman/icdiff/master/icdiff f
+wg git-cdi    https://raw.githubusercontent.com/jeffkaufman/icdiff/master/git-icdiff f
+
 
 echo
-echo "== All done"
+echo "== All done =="
