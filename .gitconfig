@@ -1,8 +1,9 @@
-[core]
-	excludesfile = ~/.gitignore_global
+[user]
+    name = CQD
+    email = cqd@hiigara.net
 
-[commit]
-    gpgsign = true
+[core]
+    excludesfile = ~/.gitignore_global
 
 [color]
         ui = auto
@@ -76,10 +77,13 @@
         ol = format:%Cred%h%Creset -%C(yellow)%d%Creset %s %C(bold black)- %cn %Creset%Cgreen(%ar)%Creset
 
 [init]
-	defaultBranch = master
+    defaultBranch = master
 
 [gpg]
     program = gpg
+
+[include]
+    path = ~/.gitconfig_local
 
 [includeIf "gitdir:~/work-repo/"]
     path = ~/work-repo/.gitconfig

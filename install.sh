@@ -19,31 +19,6 @@ function wg {
     chmod +x $local_path
 }
 
-function git_config_user {
-    config_file="${HOME}/.gitconfig"
-    if [ ! -f $config_file ]; then
-        return
-    fi
-
-    section=0
-    while  read -r line || [[ -n "$line" ]]; do
-        if [ "" = "$line" ]; then continue; fi;
-
-        linelen=${#line}
-        if [ "[" = "${line:0:1}" ] && [ "]" = "${line:$linelen-1}" ]; then
-            section=${line:1:${#line}-2}
-            if [ "user" = "$section" ]; then echo "[$section]"; fi;
-            continue;
-        fi;
-
-        if [ "user" = "$section" ]; then
-            echo $line
-        fi;
-    done < <(cat $config_file | grep -o '^[^#]*' )
-
-    echo
-}
-
 ############################################################
 
 BASEDIR=`dirname $0`
@@ -63,9 +38,9 @@ cp ${BASEDIR}/.tmux.conf ~/
 
 #
 echo "== Installing git config"
-gitconfig=$(cat <(git_config_user) ${BASEDIR}/.gitconfig)
-echo "$gitconfig" > ~/.gitconfig
+cp ${BASEDIR}/.gitconfig ~/
 cp ${BASEDIR}/.gitignore_global ~/
+touch ~/.gitconfig_local
 
 # vim
 echo "== Installing vim config"
