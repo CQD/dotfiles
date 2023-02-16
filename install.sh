@@ -66,6 +66,7 @@ if [ -d ~/.vim ]; then
 fi
 
 
+echo
 echo "== ~/bin/ =="
 
 mkdir -p ~/bin/
