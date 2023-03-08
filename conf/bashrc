@@ -32,8 +32,14 @@ function git_branch {
     # modified files
     if [ -z "$NO_GIT_STATUS" ] ; then
         st=$(git status -s)
+
+        # staged
         flags_s=$(echo "$st" | cut -b 1-1 | tr -d "\n" | tr -d "?" )
+        flags_s=${flags_s/ /}
+
+        # not staged
         flags_ns=$(echo "$st" | cut -b 2-2 | tr -d "\n" )
+        flags_ns=${flags_ns/ /}
     fi
 
     # ref name, or commit hash
