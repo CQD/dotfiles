@@ -37,6 +37,7 @@
         lg  = log --graph --pretty=ol --abbrev-commit --date=local --no-show-signature
         lga = log --graph --pretty=ol --abbrev-commit --date=local --no-show-signature --all
         sm = submodule update
+        rpo = remote prune origin
 
         # update branch
         uu = "!f() { \
