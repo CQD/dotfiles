@@ -227,21 +227,27 @@ dpe() {
 }
 
 # python alias
-venv() {
+
+_resolve_python() {
     if type python3 &> /dev/null ; then
-        python3 -m venv $@
-    elif type python &> /dev/null; then
-        python -m venv $@
+        echo python3
     else
-        echo "找不到 python!"
-        exit -1
+        echo python
     fi
+}
+
+venv() {
+    py=$(_resolve_python)
+    $py -m venv $@
 }
 
 av() {
     base=${1:-venv}
     if [ ! -f $base/bin/activate ]; then
-        echo "把 virtual env 建立到 $base..."
+        py=$(_resolve_python)
+        echo "把 virtual env 建立到 $base"
+        type $py
+        echo "python 版本: "$($py --version)
         venv $base
     fi
     . $base/bin/activate
