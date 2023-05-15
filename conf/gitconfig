@@ -63,9 +63,9 @@
         }; f"
 
         cm = "!f(){ \
-            git checkout master || \
-            git checkout main || \
-            echo 'Branch master/main not exist' && false ; \
+            branch=$((git symbolic-ref -q --short refs/remotes/origin/HEAD || echo local/master) | cut -d / -f 2); \
+            echo checking out $branch...; \
+            git checkout $branch; \
         }; f"
 
 [branch]
