@@ -63,7 +63,7 @@
         }; f"
 
         cm = "!f(){ \
-            branch=$((git symbolic-ref -q --short refs/remotes/origin/HEAD || echo local/master) | cut -d / -f 2); \
+            branch=$( (git symbolic-ref -q --short refs/remotes/origin/HEAD || echo local/master) | cut -d / -f 2); \
             echo checking out $branch...; \
             git checkout $branch; \
         }; f"
