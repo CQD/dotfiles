@@ -33,6 +33,7 @@
         rbi = rebase --interactive
         rbc = rebase --continue
         rba = rebase --abort
+        rbs = rebase --exec 'git commit --amend --no-edit -n -S' # https://superuser.com/a/1123928
         cp = cherry-pick
         lg  = log --graph --pretty=ol --abbrev-commit --date=local --no-show-signature
         lga = log --graph --pretty=ol --abbrev-commit --date=local --no-show-signature --all
