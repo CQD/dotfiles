@@ -23,8 +23,9 @@ function git_branch {
     # do nothing if
     # - no git
     # - not git repo
+    # - not in work tree
     if ! type git &> /dev/null \
-       || ! git rev-parse --is-inside-work-tree &> /dev/null \
+       || [ "false" == "$(git rev-parse --is-inside-work-tree 2>/dev/null || echo false)" ] &> /dev/null \
     ; then
         return
     fi
