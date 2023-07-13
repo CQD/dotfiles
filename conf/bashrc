@@ -215,7 +215,7 @@ alias ta='tmux attach'
 
 # Docker alias
 dp() {
-    nice -n 10 docker compose $@
+    nice -n 19 docker compose $@
 }
 
 dps() {
