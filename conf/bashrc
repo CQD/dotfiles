@@ -134,7 +134,7 @@ function ps_git {
     flag_not_staged=${git_info[3]/_/}
 
     if [ "$prefix" == "b" ] ; then
-        if [ "$branch" == "master" ] ; then
+        if [ "$branch" == "master" ] || [ "$branch" == "main" ] ; then
             color=106
         elif [ "$branch" == "develop" ] ; then
             color=114
