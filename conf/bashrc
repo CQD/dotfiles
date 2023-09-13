@@ -248,8 +248,14 @@ av() {
     fi
     current_folder=${PWD##*/}
     current_folder=${current_folder:-root}
+
     base=${1:-venv}
     name=${2:-$current_folder}
+
+    if [ "" == "$1" ] && [ ! -d "$base" ] && [ -d ".venv" ] ; then
+        base=".venv"
+    fi
+
     if [ ! -f $base/bin/activate ]; then
         py=$(_resolve_python)
         echo "把 virtual env 建立到 $base"
