@@ -242,13 +242,16 @@ venv() {
 }
 
 av() {
+    current_folder=${PWD##*/}
+    current_folder=${current_folder:-root}
     base=${1:-venv}
+    name=${2:-$current_folder}
     if [ ! -f $base/bin/activate ]; then
         py=$(_resolve_python)
         echo "把 virtual env 建立到 $base"
         type $py
         echo "python 版本: "$($py --version)
-        venv $base
+        venv --prompt $name $base
     fi
     . $base/bin/activate
 }
