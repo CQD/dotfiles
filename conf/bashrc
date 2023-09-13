@@ -242,6 +242,10 @@ venv() {
 }
 
 av() {
+    if [ "" != "$VIRTUAL_ENV" ] ; then
+        echo "已啟動 virtual env"
+        return
+    fi
     current_folder=${PWD##*/}
     current_folder=${current_folder:-root}
     base=${1:-venv}
