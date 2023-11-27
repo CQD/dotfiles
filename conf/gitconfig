@@ -37,8 +37,10 @@
         cp = cherry-pick
         lg  = log --graph --pretty=ol --abbrev-commit --date=local --no-show-signature
         lga = log --graph --pretty=ol --abbrev-commit --date=local --no-show-signature --all
-        sm = submodule update
+        sm = submodule
+        smu = submodule update
         rpo = remote prune origin
+        fo = fetch origin
 
         # update branch
         uu = "!f() { \
