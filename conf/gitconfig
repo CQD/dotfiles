@@ -28,7 +28,6 @@
         shn = show --name-only
         shst = show --stat
         br = branch
-        co = checkout
         rb = rebase
         rbi = rebase --interactive
         rbc = rebase --continue
@@ -39,8 +38,10 @@
         lga = log --graph --pretty=ol --abbrev-commit --date=local --no-show-signature --all
         sm = submodule
         smu = submodule update
+        smur = submodule update --remote
         rpo = remote prune origin
         fo = fetch origin
+        po = push origin
 
         # update branch
         uu = "!f() { \
