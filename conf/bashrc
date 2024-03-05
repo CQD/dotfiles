@@ -32,7 +32,7 @@ function git_branch {
 
     # modified files
     if [ -z "$NO_GIT_STATUS" ] ; then
-        st=$(git status -s)
+        st=$(git status -s 2> /dev/null )
 
         # staged
         flags_s=$(echo "$st" | cut -b 1-1 | tr -d "\n" | tr -d "?" )
@@ -49,7 +49,7 @@ function git_branch {
 
     if [ "" == "$ref" ] ; then
         head_type='h' # hash
-        ref=$(git log --pretty=format:'%h' -n 1 2> /dev/null);
+        ref=$(git log --pretty=format:'%h' -n 1 2> /dev/null | grep -v 'gpg:');
     fi
 
     # print result
