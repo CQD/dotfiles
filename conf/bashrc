@@ -96,7 +96,15 @@ function ps_login {
     _HOSTNAME=${PS_HOSTNAME:-$HOSTNAME}
     _HOSTNAME=${_HOSTNAME/.lan/}
     _HOSTNAME=${_HOSTNAME/.compute.internal/.aws}
-    echo '\[\e[48;5;235m\] $(ps_status)\[\e[38;5;'$(rand_color $USER)'m\]\u\[\e[37m\]@\[\e[38;5;'$(rand_color $_PS_HOSTNAME)'m\]${PS_HOSTNAME:-'$_HOSTNAME'} '
+
+    if [ "$USER" == "root" ]; then
+        user_color="255;41"
+    else
+        user_color=$(rand_color $USER)
+    fi
+
+    host_color=$(rand_color $_PS_HOSTNAME)
+    echo '\[\e[48;5;235m\] $(ps_status)\[\e[38;5;'$user_color'm\]\u\[\e[m\e[37m\]@\[\e[38;5;'$host_color'm\]${PS_HOSTNAME:-'$_HOSTNAME'} '
 }
 function ps_status {
     ret=$?
