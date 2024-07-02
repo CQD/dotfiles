@@ -35,12 +35,10 @@ function git_branch {
         st=$(git status -s 2> /dev/null )
 
         # staged
-        flags_s=$(echo "$st" | cut -b 1-1 | tr -d "\n" | tr -d "?" )
-        flags_s=${flags_s/ /}
+        flags_s=$(echo "$st" | cut -b 1-1 | tr -d "\n ?" )
 
         # not staged
-        flags_ns=$(echo "$st" | cut -b 2-2 | tr -d "\n" )
-        flags_ns=${flags_ns/ /}
+        flags_ns=$(echo "$st" | cut -b 2-2 | tr -d "\n " )
     fi
 
     # ref name, or commit hash
