@@ -14,31 +14,38 @@ export TERM=xterm-256color
                                               # https://superuser.com/questions/424086
 PATH=$PATH:~/bin
 
+PS_TRIANGLE=$'\uE0B0'
+
+export VIRTUAL_ENV_DISABLE_PROMPT=1  # 停用 virtualenv 的 prompt 改寫，後面會用 $VIRTUAL_ENV 來判斷
+
 ###############################
 # Prompt styling
 ###############################
 
 # print git branch status
 function git_branch {
-    # do nothing if
-    # - no git
-    # - not git repo
-    # - not in work tree
-    if ! type git &> /dev/null \
-       || [ "false" == "$(git rev-parse --is-inside-work-tree 2>/dev/null || echo false)" ] &> /dev/null \
-    ; then
+    # modified files
+    st=$(git status -s 2> /dev/null )
+    if [ ! $? == "0" ] ; then
         return
     fi
 
-    # modified files
-    if [ -z "$NO_GIT_STATUS" ] ; then
-        st=$(git status -s 2> /dev/null )
+    flags_s=""
+    flags_ns=""
 
-        # staged
-        flags_s=$(echo "$st" | cut -b 1-1 | tr -d "\n ?" )
+    if [ ! "" == "$st" ] ; then
+        while IFS= read -r line; do
+            staged_flag="${line:0:1}"
+            not_staged_flag="${line:1:1}"
 
-        # not staged
-        flags_ns=$(echo "$st" | cut -b 2-2 | tr -d "\n " )
+            if [ ! "$staged_flag" == " " ] && [ ! "$staged_flag" == "?" ]; then
+                flags_s+=$staged_flag
+            fi
+
+            if [[ "$not_staged_flag" != " " ]]; then
+                flags_ns+=$not_staged_flag
+            fi
+        done <<< "$st"
     fi
 
     # ref name, or commit hash
@@ -47,33 +54,30 @@ function git_branch {
 
     if [ "" == "$ref" ] ; then
         head_type='h' # hash
-        ref=$(git log --pretty=format:'%h' -n 1 2> /dev/null | grep -v 'gpg:');
+        ref=$( git rev-parse --short HEAD 2> /dev/null );
     fi
 
     # print result
     echo "$head_type $ref _$flags_s _$flags_ns";
 }
 
-# random choose host color according to input string
+# random choose color according to input string
+# ref: https://stackoverflow.com/a/27165165
 function rand_color {
-    local r g b fgcode offset
-    if [ -z "$2" ]; then
-        offset=5
-    else
-        offset=$2
-    fi
+    min=$1
+    scale=$2
+    text=$3
 
     r=-1; g=-1; b=-1
 
-    RANDOM=$(num-from-string $1); #seed with input string
-    until [ $(( $r + $g + $b )) -ge $offset ]; do
-        r=$(($RANDOM % 6));
-        g=$(($RANDOM % 6));
-        b=$(($RANDOM % 6));
-    done
+    RANDOM=$(num-from-string $text); #seed with input string
+    r=$(( ( $RANDOM % $scale ) + $min));
+    g=$(( ( $RANDOM % $scale ) + $min));
+    b=$(( ( $RANDOM % $scale ) + $min));
 
-    fgcode=$((16 + 36 * $r + 6 * $g + $b))
-    echo $fgcode
+    color_code=$(( 16 + 36 * $r + 6 * $g + $b))
+    color_code=$(printf "%03d" $color_code)
+    echo $color_code
 }
 
 function num-from-string {
@@ -87,44 +91,31 @@ function num-from-string {
     echo $(($out % 1000000))
 }
 
-function ps_path {
-    echo '\[\e[48;5;75m\]\[\e[30m\] \w '
-}
 function ps_login {
     _HOSTNAME=${PS_HOSTNAME:-$HOSTNAME}
     _HOSTNAME=${_HOSTNAME/.lan/}
     _HOSTNAME=${_HOSTNAME/.compute.internal/.aws}
 
+    user_color=$(rand_color 3 3 $USER)
+    host_color=$(rand_color 3 3 $_HOSTNAME)
+
+    bgcolor=017
+
     if [ "$USER" == "root" ]; then
-        user_color="255;41"
-    else
-        user_color=$(rand_color $USER)
+        user_color="196"
     fi
 
-    host_color=$(rand_color $_PS_HOSTNAME)
-    echo '\[\e[48;5;235m\] $(ps_status)\[\e[38;5;'$user_color'm\]\u\[\e[m\e[37m\]@\[\e[38;5;'$host_color'm\]${PS_HOSTNAME:-'$_HOSTNAME'} '
+    echo -ne '\[\e[48;5;'$bgcolor'm\e[38;5;'$user_color'm\] '$USER'\[\e[38;5;248m\]@\[\e[38;5;'$host_color'm\]'$_HOSTNAME' \[\e[38;5;'$bgcolor'm\]'
 }
-function ps_status {
-    ret=$?
 
-    local symbols job_cnt gears
-    symbols=''
+function ps_path {
+    bgcolor=026
+    fgcolor=255
+    local_path=${PWD/#$HOME/\~}
 
-    # last command failed
-    if [ $ret -ne 0 ] ; then
-        symbols+='\033[38;5;160m✘ \033[22m'
-    fi
-
-    # background job running
-    job_cnt=$(jobs -l | wc -l)
-    if [ $job_cnt -gt 0 ] ; then
-        gears=$(yes '⌛' |head -n $job_cnt)
-        symbols+='\033[38;5;208m'$gears' \033[22m'
-    fi
-
-    # output
-    echo -e $symbols
+    echo -ne '\[\e[48;5;'$bgcolor'm\]'$PS_TRIANGLE'\[\e[38;5;'$fgcolor'm\] '$local_path' \[\e[38;5;'$bgcolor'm\]'
 }
+
 function ps_git {
     local branch prefix color
 
@@ -139,35 +130,91 @@ function ps_git {
     flag_staged=${git_info[2]/_/}
     flag_not_staged=${git_info[3]/_/}
 
+    branch_symbol='⎇'
+
+    fgcolor=231
+
     if [ "$prefix" == "b" ] ; then
         if [ "$branch" == "master" ] || [ "$branch" == "main" ] ; then
-            color=106
+            bgcolor=028
         elif [ "$branch" == "develop" ] ; then
-            color=114
+            bgcolor=100
         else
-            color=$(rand_color $branch 6)
+            bgcolor=$(rand_color 0 3 $branch)
         fi
-        echo -ne '\033[0;30;48;5;'$color'm ⎇ '$branch' '
     else
-        echo -ne '\033[0;30;48;5;136m ➦ '$branch' '
+        bgcolor=136
+        branch_symbol='➦'
     fi
 
-    echo -ne '\033[m'
+    echo -ne '\[\e[48;5;'$bgcolor'm\]'$PS_TRIANGLE'\[\e[38;5;'$fgcolor'm\] '$branch_symbol' '$branch' '
+
+    echo -ne '\[\e[m\]'
 
     if [ ! "" == "$flag_staged" ] ; then
-      echo -ne '\033[0;43;30m' $flag_staged' '
+      bgcolor=003
+      echo -ne '\[\e[0;43;30m\]' $flag_staged' '
     fi
     if [ ! "" == "$flag_not_staged" ] ; then
-      echo -ne '\033[1;41;37m' $flag_not_staged' '
+      bgcolor=001
+      echo -ne '\[\e[1;41;37m\]' $flag_not_staged' '
     fi
 
-    echo -e '\033[m'
-}
-function ps_time {
-    date '+[%H:%M:%S]'
+    echo -e '\[\e[38;5;'$bgcolor'm\]'
 }
 
-PS1=$(ps_login)$(ps_path)'$(ps_git)\[\e[0m\]\n\[\e[32m\]$(ps_time) \[\e[33m\]$\[\e[0m\] '
+function ps_time {
+    fgcolor=253
+    bgcolor=237
+    time_str=$(date '+%H:%M:%S')
+    echo -ne '\[\e[48;5;'$bgcolor'm\e[38;5;'$fgcolor'm\] '$time_str' \[\e[38;5;'$bgcolor'm\]'
+}
+
+function ps_venv() {
+    if [ "" == "$VIRTUAL_ENV" ] ; then
+        return
+    fi
+
+    # replace '/venv' with ''
+    parent_name=${VIRTUAL_ENV/\/venv/}
+    venv_name=$(basename $parent_name)
+
+    fgcolor=226
+    bgcolor=094
+
+    echo -ne "\[\e[48;5;${bgcolor}m\]${PS_TRIANGLE}\[\e[38;5;${fgcolor}m\] $venv_name \[\e[38;5;${bgcolor}m\]"
+}
+
+function ps_marker() {
+    _STATUS=$1
+
+    _PS_STATUS=''
+
+    fgcolor=000
+    bgcolor=255
+
+    if [ $_STATUS -ne 0 ] ; then
+        fgcolor=255
+        bgcolor=196
+        _PS_STATUS=' '$_STATUS' '
+    fi
+
+    echo -ne '\[\e[48;5;'$bgcolor'm\]'$PS_TRIANGLE'\[\e[38;5;'$fgcolor'm\] '$_PS_STATUS'$ \[\e[38;5;'$bgcolor'm\]'
+}
+function ps_run() {
+    prev_status_code=$?  # store status for later use, as it will be cleared by next command
+
+    _LINE_END='\[\e[40m\]'$PS_TRIANGLE'\[\e[0;30m\]'
+
+    # start_time=$EPOCHREALTIME
+    echo -ne "\n"$(ps_login)$(ps_path)$(ps_git)"$_LINE_END\n"
+    echo -ne $(ps_time)$(ps_venv)$(ps_marker "$prev_status_code")
+    echo -ne "$_LINE_END \[\e[0m\]"
+    # end_time=$EPOCHREALTIME
+    # echo -ne $(scale=3 echo "$end_time - $start_time" | bc)" "
+}
+
+PROMPT_COMMAND='PS1=$(ps_run)'
 
 ###############################
 # Run scripts
