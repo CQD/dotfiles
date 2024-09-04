@@ -182,7 +182,7 @@ function ps_venv() {
     fgcolor=226
     bgcolor=094
 
-    echo -ne "\[\e[48;5;${bgcolor}m\]${PS_TRIANGLE}\[\e[38;5;${fgcolor}m\] $venv_name \[\e[38;5;${bgcolor}m\]"
+    echo -ne "\[\e[48;5;${bgcolor}m\]${PS_TRIANGLE}\[\e[38;5;${fgcolor}m\] 🐍$venv_name \[\e[38;5;${bgcolor}m\]"
 }
 
 function ps_marker() {
