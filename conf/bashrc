@@ -160,7 +160,7 @@ function ps_git {
       echo -ne '\[\e[1;41;37m\]' $flag_not_staged' '
     fi
 
-    echo -e '\[\e[38;5;'$bgcolor'm\]'
+    echo -e '\[\e[0;38;5;'$bgcolor'm\]'
 }
 
 function ps_time {
