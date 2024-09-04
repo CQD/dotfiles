@@ -163,11 +163,69 @@ function ps_git {
     echo -e '\[\e[0;38;5;'$bgcolor'm\]'
 }
 
+
+export CQD_TIMER_EXP=''
+export CQD_TIMER_DESC=''
+
 function ps_time {
     fgcolor=253
     bgcolor=237
-    time_str=$(date '+%H:%M:%S')
-    echo -ne '\[\e[48;5;'$bgcolor'm\e[38;5;'$fgcolor'm\] '$time_str' \[\e[38;5;'$bgcolor'm\]'
+
+    # time_ary[0] => HH:MM:SS
+    # time_ary[1] => unix timestamp
+    time_ary=($(date +'%H:%M:%S %s'))
+    timer_txt=''
+
+    if [ ! "$CQD_TIMER_EXP" == "" ] ; then
+        if [ "${time_ary[1]}" -gt "$CQD_TIMER_EXP" ]; then
+            bgcolor=124
+            timer_txt=" ⏰$CQD_TIMER_DESC"
+        else
+            time_used=$(($CQD_TIMER_EXP - ${time_ary[1]}))
+            hh=$(($time_used / 3600))
+            mm=$((($time_used % 3600) / 60))
+            ss=$(($time_used % 60))
+            if [ "$hh" == "0" ]; then
+                hms=$(printf "%02d:%02d" "$mm" "$ss")
+            else
+                hms=$(printf "%02d:%02d:%02d" "$hh" "$mm" "$ss")
+            fi
+            timer_txt=" ⏰$hms"
+        fi
+    fi
+
+    echo -ne '\[\e[48;5;'$bgcolor'm\e[38;5;'$fgcolor'm\] '${time_ary[0]}${timer_txt}' \[\e[38;5;'$bgcolor'm\]'
+}
+
+function timer() {
+    now=$(date +%s)
+
+    # 沒有參數，印出目前的 timer
+    # 有參數，則設定 timer 並寫入 CQD_TIMER，時間到時會在 ps_time 中警示
+    if [ "" == "$1" ] ; then
+        if [ "" == "$CQD_TIMER_EXP" ]; then
+            echo "目前沒有設定倒數計時，請用 'timer <秒數> [說明]' 來設定，用 'timer clear' 來清除"
+            return
+        fi
+
+        echo "目前設定的倒數計時: $CQD_TIMER_DESC (剩 $(($CQD_TIMER_EXP - $now)) 秒)"
+        return
+    fi
+
+    if [ "$1" == "clear" ] || [ "$1" == "c" ]  ; then
+        CQD_TIMER_DESC=''
+        CQD_TIMER_EXP=''
+        echo "清除倒數計時"
+        return
+    fi
+
+    ttl=$1
+    shift
+
+    export CQD_TIMER_DESC=${@:-"倒數計時 $ttl 秒"}
+    export CQD_TIMER_EXP=$(( now + $ttl ))
+
+    echo "設定倒數計時: $CQD_TIMER_DESC (剩 $ttl 秒)"
 }
 
 function ps_venv() {
