@@ -10,13 +10,28 @@ export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 export TERM=xterm-256color
 
+export VIRTUAL_ENV_DISABLE_PROMPT=1  # 停用 virtualenv 的 prompt 改寫，後面會用 $VIRTUAL_ENV 來判斷
+
 [ -n "$TMUX" ] && export TERM=screen-256color # tmux matches screen instead of xterm
                                               # https://superuser.com/questions/424086
 PATH=$PATH:~/bin
 
 PS_TRIANGLE=$'\uE0B0'
 
-export VIRTUAL_ENV_DISABLE_PROMPT=1  # 停用 virtualenv 的 prompt 改寫，後面會用 $VIRTUAL_ENV 來判斷
+# https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html
+# "When a command terminates on a fatal signal whose number is N,
+#  Bash uses the value 128+N as the exit status. "
+# 可以這樣反推出原本的 signal number
+declare -a EXIT_CODES_DESC
+EXIT_CODES_DESC[129]="SIGHUP"  # 128 + 1
+EXIT_CODES_DESC[130]="SIGINT"  # 128 + 2 以下類推
+EXIT_CODES_DESC[131]="SIGQUIT"
+EXIT_CODES_DESC[132]="SIGILL"
+EXIT_CODES_DESC[134]="SIGABRT"
+EXIT_CODES_DESC[136]="SIGFPE"
+EXIT_CODES_DESC[137]="SIGKILL"
+EXIT_CODES_DESC[139]="SIGSEGV"
+EXIT_CODES_DESC[141]="SIGPIPE"
 
 ###############################
 # Prompt styling
@@ -255,6 +270,9 @@ function ps_marker() {
         fgcolor=255
         bgcolor=196
         _PS_STATUS=' '$_STATUS' '
+        if [ ! "${EXIT_CODES_DESC[$_STATUS]}" == "" ] ; then
+            _PS_STATUS=' '$_STATUS'('${EXIT_CODES_DESC[$_STATUS]}') '
+        fi
     fi
 
     echo -ne '\[\e[48;5;'$bgcolor'm\]'$PS_TRIANGLE'\[\e[38;5;'$fgcolor'm\] '$_PS_STATUS'$ \[\e[38;5;'$bgcolor'm\]'
