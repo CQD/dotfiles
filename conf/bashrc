@@ -175,7 +175,7 @@ function ps_git {
       echo -ne '\[\e[1;41;37m\]' $flag_not_staged' '
     fi
 
-    echo -e '\[\e[0;38;5;'$bgcolor'm\]'
+    echo -ne '\[\e[0;38;5;'$bgcolor'm\]'
 }
 
 
@@ -283,9 +283,9 @@ function ps_run() {
     _LINE_END='\[\e[40m\]'$PS_TRIANGLE'\[\e[0;30m\]'
 
     # start_time=$EPOCHREALTIME
-    echo -ne "\n"$(ps_login)$(ps_path)$(ps_git)"$_LINE_END\n"
-    echo -ne $(ps_time)$(ps_venv)$(ps_marker "$prev_status_code")
-    echo -ne "$_LINE_END \[\e[0m\]"
+    echo -ne "\n"
+    ps_login; ps_path; ps_git; echo -ne "$_LINE_END\n"
+    ps_time; ps_venv; ps_marker "$prev_status_code"; echo -ne "$_LINE_END \[\e[0m\]"
     # end_time=$EPOCHREALTIME
     # echo -ne $(scale=3 echo "$end_time - $start_time" | bc)" "
 }
