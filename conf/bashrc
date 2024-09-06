@@ -45,20 +45,34 @@ function git_branch {
         return
     fi
 
-    flags_s=""
-    flags_ns=""
+    modified=0
+    staged=0
+    untracked=0
+    conflict=0
 
     if [ ! "" == "$st" ] ; then
         while IFS= read -r line; do
             staged_flag="${line:0:1}"
             not_staged_flag="${line:1:1}"
 
-            if [ ! "$staged_flag" == " " ] && [ ! "$staged_flag" == "?" ]; then
-                flags_s+=$staged_flag
+            if [ "$staged_flag" == "U" ] || [ "$not_staged_flag" == "U" ]; then
+                conflict=$((conflict + 1))
+                continue
+            fi
+
+            if [ "$staged_flag" == "?" ] || [ "$not_staged_flag" == "?" ]; then
+                untracked=$((untracked + 1))
+                continue
+            fi
+
+            if [[ "$staged_flag" != " " ]]; then
+                staged=$((staged + 1))
+                continue
             fi
 
             if [[ "$not_staged_flag" != " " ]]; then
-                flags_ns+=$not_staged_flag
+                modified=$((modified + 1))
+                continue
             fi
         done <<< "$st"
     fi
@@ -73,7 +87,7 @@ function git_branch {
     fi
 
     # print result
-    echo "$head_type $ref _$flags_s _$flags_ns";
+    echo "$head_type $ref $modified $staged $untracked $conflict";
 }
 
 # random choose color according to input string
@@ -142,8 +156,11 @@ function ps_git {
     git_info=( $git_info )
     prefix=${git_info[0]}
     branch=${git_info[1]}
-    flag_staged=${git_info[2]/_/}
-    flag_not_staged=${git_info[3]/_/}
+
+    modified=${git_info[2]}
+    staged=${git_info[3]}
+    untracked=${git_info[4]}
+    conflict=${git_info[5]}
 
     branch_symbol='⎇'
 
@@ -164,16 +181,29 @@ function ps_git {
 
     echo -ne '\[\e[48;5;'$bgcolor'm\]'$PS_TRIANGLE'\[\e[38;5;'$fgcolor'm\] '$branch_symbol' '$branch' '
 
-    echo -ne '\[\e[m\]'
+    # print status
+    loop_var=(
+        M $modified  160
+        S $staged    172
+        U $untracked 026
+        C $conflict  163
+    )
 
-    if [ ! "" == "$flag_staged" ] ; then
-      bgcolor=003
-      echo -ne '\[\e[0;43;30m\]' $flag_staged' '
-    fi
-    if [ ! "" == "$flag_not_staged" ] ; then
-      bgcolor=001
-      echo -ne '\[\e[1;41;37m\]' $flag_not_staged' '
-    fi
+    for ((i=0; i<${#loop_var[@]}; i+=3)); do
+        cnt=${loop_var[i+1]}
+        if [ "$cnt" == "0" ] ; then
+            continue
+        fi
+
+        if [ "$cnt" == "1" ] ; then
+            cnt=""
+        fi
+
+        flag=${loop_var[i]}
+        bgcolor=${loop_var[i+2]}
+
+        echo -ne '\[\e[48;5;'$bgcolor'm\]' $flag$cnt' '
+    done
 
     echo -ne '\[\e[0;38;5;'$bgcolor'm\]'
 }
