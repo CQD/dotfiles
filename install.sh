@@ -48,6 +48,32 @@ function mkdln {
 
 ############################################################
 
+function mac_install {
+    if ! command -v brew &> /dev/null; then
+        echo "安裝 Homebrew"
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+
+    brew update
+    brew install pyenv bash
+
+    ########################################
+    # mac 預設 shell 是 bash 3.x
+    # 安裝新版 bash 並設為預設 shell
+    ########################################
+    shell_path=$SHELL
+    brew_shell_path=$(brew --prefix)/bin/bash
+
+    # 設定
+    if [ "$shell_path" != "$brew_shell_path" ]; then
+        echo "將 $brew_shell_path 設為預設 shell"
+        # sudo bash -c "echo $brew_shell_path >> /etc/shells"
+        chsh -s $brew_shell_path
+    fi
+}
+
+############################################################
+
 umask 077
 
 echo "== Config files =="
@@ -78,6 +104,13 @@ wg cps        https://getcomposer.org/composer.phar f
 wg psysh      https://psysh.org/psysh f
 wg icdiff     https://raw.githubusercontent.com/jeffkaufman/icdiff/master/icdiff f
 wg git-cdi    https://raw.githubusercontent.com/jeffkaufman/icdiff/master/git-icdiff f
+
+
+# install brew if macOS
+if [ "$(uname)" == "Darwin" ]; then
+    echo "== mac =="
+    mac_install || true
+fi
 
 
 echo
