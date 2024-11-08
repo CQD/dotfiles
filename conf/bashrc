@@ -385,6 +385,9 @@ dpe() {
     dp exec $@
 }
 
+# kubectl 好長
+alias k8s=kubectl
+
 # python alias
 
 _resolve_python() {
