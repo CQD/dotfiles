@@ -333,6 +333,9 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
+# 確保 cd 自動完成時最後會補上「/」
+complete -d -f -o dirnames cd
+
 # include machine depending settings that not to be included in dotfile repo
 if [ -f ~/.bashrc_local ] ; then
     source ~/.bashrc_local
