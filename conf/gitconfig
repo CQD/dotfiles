@@ -84,8 +84,11 @@
 [log]
     showSignature=true
 
+[rebase]
+    updateRefs = true
+
 [init]
-    defaultBranch = master
+    defaultBranch = main
 
 [gpg]
     program = gpg
