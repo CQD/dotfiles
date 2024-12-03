@@ -72,6 +72,9 @@
             git checkout $branch; \
         }; f"
 
+[rerere]
+    enable = true
+
 [branch]
         autosetuprebase = always
 
