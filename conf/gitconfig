@@ -43,7 +43,7 @@
     fo = fetch origin
     po = push origin
 
-
+    cdic = cdi --cached
 
     # update branch
     uu = "!f() { \
