@@ -6,92 +6,94 @@
     excludesfile = ~/.gitignore_global
 
 [color]
-        ui = auto
-        status = auto
-        branch = auto
+    ui = auto
+    status = auto
+    branch = auto
 
 [alias]
-        ci = commit
-        amend = commit --amend --no-edit
-        co = checkout
-        cs = checkout staging
-        di = diff
-        din = diff --name-only
-        dist = diff --stat
-        dicw = diff --color-words
-        dic = diff --cached
-        dinc = diff --name-only --cached
-        distc = diff --stat --cached
-        dicwc = diff --color-words --cached
-        st = status
-        sh = show
-        shn = show --name-only
-        shst = show --stat
-        br = branch
-        rb = rebase
-        rbi = rebase --interactive
-        rbc = rebase --continue
-        rba = rebase --abort
-        rbs = rebase --exec 'git commit --amend --no-edit -n -S' # https://superuser.com/a/1123928
-        cp = cherry-pick
-        lg  = log --graph --pretty=ol --abbrev-commit --date=local --no-show-signature
-        lga = log --graph --pretty=ol --abbrev-commit --date=local --no-show-signature --all
-        sm = submodule
-        smu = submodule update
-        smur = submodule update --remote
-        rpo = remote prune origin
-        fo = fetch origin
-        po = push origin
+    ci = commit
+    amend = commit --amend --no-edit
+    co = checkout
+    cs = checkout staging
+    di = diff
+    din = diff --name-only
+    dist = diff --stat
+    dicw = diff --color-words
+    dic = diff --cached
+    dinc = diff --name-only --cached
+    distc = diff --stat --cached
+    dicwc = diff --color-words --cached
+    st = status
+    sh = show
+    shn = show --name-only
+    shst = show --stat
+    br = branch
+    rb = rebase
+    rbi = rebase --interactive
+    rbc = rebase --continue
+    rba = rebase --abort
+    rbs = rebase --exec 'git commit --amend --no-edit -n -S' # https://superuser.com/a/1123928
+    cp = cherry-pick
+    lg  = log --graph --pretty=ol --abbrev-commit --date=local --no-show-signature
+    lga = log --graph --pretty=ol --abbrev-commit --date=local --no-show-signature --all
+    sm = submodule
+    smu = submodule update
+    smur = submodule update --remote
+    rpo = remote prune origin
+    fo = fetch origin
+    po = push origin
 
-        # update branch
-        uu = "!f() { \
-            remote=${1:-origin} \
-            br=${2:-$(git branch-name)}; \
-            git co $br && git pull $remote $br; \
-        }; f"
-        um = "!f() { git uu origin master; }; f"
-        us = "!f() { git uu origin staging; }; f"
 
-        # Fetch and reset to branch from origin
-        fr = "!f(){ \
-            branch=$(git rev-parse --abbrev-ref HEAD); \
-            echo Fetch and reset to origin/$branch...; \
-            git fetch origin $branch; \
-            git reset origin/$branch --hard; \
-        }; f"
 
-        # Fetch and checkout branch from origin
-        fc = "!f(){ \
-            branch=${1:-master}; \
-            echo Fetch and checkout to origin/$branch...; \
-            git fetch origin $branch; \
-            git checkout $branch; \
-        }; f"
+    # update branch
+    uu = "!f() { \
+        remote=${1:-origin} \
+        br=${2:-$(git branch-name)}; \
+        git co $br && git pull $remote $br; \
+    }; f"
+    um = "!f() { git uu origin master; }; f"
+    us = "!f() { git uu origin staging; }; f"
 
-        # Checkout main / master
-        cm = "!f(){ \
-            branch=$( (git symbolic-ref -q --short refs/remotes/origin/HEAD || echo local/master) | cut -d / -f 2); \
-            echo checking out $branch...; \
-            git checkout $branch; \
-        }; f"
+    # Fetch and reset to branch from origin
+    fr = "!f(){ \
+        branch=$(git rev-parse --abbrev-ref HEAD); \
+        echo Fetch and reset to origin/$branch...; \
+        git fetch origin $branch; \
+        git reset origin/$branch --hard; \
+    }; f"
 
-        # Clear merged branch
-        pbr = "!f(){\
-            for br in $( git branch --merged | grep -v 'main\\|master'  ); do echo deleting $br... ; git branch -d $br || true  ; done ; \
-            git remote prune origin; \
-        };f"
+    # Fetch and checkout branch from origin
+    fc = "!f(){ \
+        branch=${1:-master}; \
+        echo Fetch and checkout to origin/$branch...; \
+        git fetch origin $branch; \
+        git checkout $branch; \
+    }; f"
+
+    # Checkout main / master
+    cm = "!f(){ \
+        branch=$( (git symbolic-ref -q --short refs/remotes/origin/HEAD || echo local/master) | cut -d / -f 2); \
+        echo checking out $branch...; \
+        git checkout $branch; \
+    }; f"
+
+    # Clear merged branch
+    pbr = "!f(){\
+        for br in $( git branch --merged | grep -v 'main\\|master'  ); do echo deleting $br... ; git branch -d $br || true  ; done ; \
+        git remote prune origin; \
+    };f"
 
 [rerere]
     enable = true
 
 [branch]
-        autosetuprebase = always
+    autosetuprebase = always
 
 [branch "master"]
-        rebase = true
+    rebase = true
 
 [pretty]
-        ol = format:%Cred%h%Creset -%C(yellow)%d%Creset %s %C(bold black)- %cn %Creset%Cgreen(%ar)%Creset
+    ol = format:%Cred%h%Creset -%C(yellow)%d%Creset %s %C(bold black)- %cn %Creset%Cgreen(%ar)%Creset
 
 [log]
     showSignature=true
