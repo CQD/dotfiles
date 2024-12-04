@@ -52,6 +52,7 @@
         um = "!f() { git uu origin master; }; f"
         us = "!f() { git uu origin staging; }; f"
 
+        # Fetch and reset to branch from origin
         fr = "!f(){ \
             branch=$(git rev-parse --abbrev-ref HEAD); \
             echo Fetch and reset to origin/$branch...; \
@@ -59,6 +60,7 @@
             git reset origin/$branch --hard; \
         }; f"
 
+        # Fetch and checkout branch from origin
         fc = "!f(){ \
             branch=${1:-master}; \
             echo Fetch and checkout to origin/$branch...; \
@@ -66,11 +68,18 @@
             git checkout $branch; \
         }; f"
 
+        # Checkout main / master
         cm = "!f(){ \
             branch=$( (git symbolic-ref -q --short refs/remotes/origin/HEAD || echo local/master) | cut -d / -f 2); \
             echo checking out $branch...; \
             git checkout $branch; \
         }; f"
+
+        # Clear merged branch
+        pbr = "!f(){\
+            for br in $( git branch --merged | grep -v 'main\\|master'  ); do echo deleting $br... ; git branch -d $br || true  ; done ; \
+            git remote prune origin; \
+        };f"
 
 [rerere]
     enable = true
