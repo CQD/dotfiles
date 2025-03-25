@@ -390,6 +390,13 @@ dpe() {
 
 # kubectl 好長
 alias k8s=kubectl
+kcx() {
+    if [ -z "$@" ]; then
+        kubectl config get-contexts;
+    else
+        kubectl config use-context $@
+    fi
+}
 
 # python alias
 
