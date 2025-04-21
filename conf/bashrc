@@ -471,9 +471,18 @@ cdp() {
     TTT=$(pwd)
     while ! [ -d .git ]; do
         cd ..
+        if [ "/" == "$(pwd)" ]; then
+            break;
+        fi
     done
     if ! [ "" == "$1" ]; then
         cd $1
     fi
-    OLDPWD=$TTT
+
+    if [ "/" == "$(pwd)" ]; then
+        echo "找不到 git repo"
+        cd $TTT
+    else
+        OLDPWD=$TTT
+    fi
 }
