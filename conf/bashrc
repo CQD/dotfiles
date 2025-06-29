@@ -468,21 +468,13 @@ man () {
 }
 
 cdp() {
-    TTT=$(pwd)
-    while ! [ -d .git ]; do
-        cd ..
-        if [ "/" == "$(pwd)" ]; then
-            break;
-        fi
-    done
-    if ! [ "" == "$1" ]; then
-        cd $1
+    root=$(git rev-parse --show-toplevel 2> /dev/null)
+    if [ $? -ne 0 ] ; then
+        echo "不是 git repo，找不到根目錄" >&2
+        return 1
     fi
 
-    if [ "/" == "$(pwd)" ]; then
-        echo "找不到 git repo"
-        cd $TTT
-    else
-        OLDPWD=$TTT
+    if [ -n "$root" ] ; then
+        cd "$root"
     fi
 }
