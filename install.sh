@@ -83,6 +83,7 @@ mkdln tmux.conf
 mkdln gitconfig
 mkdln gitignore_global
 mkdln vimrc
+mkdln tigrc
 
 touch -a ~/.bashrc_local
 touch -a ~/.gitconfig_local
