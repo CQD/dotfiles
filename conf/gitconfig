@@ -46,13 +46,14 @@
     cdic = cdi --cached
 
     # update branch
-    uu = "!f() { \
-        remote=${1:-origin} \
-        br=${2:-$(git branch-name)}; \
-        git co $br && git pull $remote $br; \
+    rbm = "!f() { \
+        branch=$(git rev-parse --abbrev-ref HEAD); \
+        git stash \
+        && git cm \
+        && git fr \
+        && git co $branch \
+        && git stash pop; \
     }; f"
-    um = "!f() { git uu origin master; }; f"
-    us = "!f() { git uu origin staging; }; f"
 
     # Fetch and reset to branch from origin
     fr = "!f(){ \
