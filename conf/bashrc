@@ -478,3 +478,8 @@ cdp() {
         cd "$root"
     fi
 }
+
+alias cdd='cd ../'
+alias cddd='cd ../../'
+alias cdddd='cd ../../../'
+alias cddddd='cd ../../../../'
