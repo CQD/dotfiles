@@ -45,6 +45,11 @@
 
     cdic = cdi --cached
 
+    cdih = "!f(){ \
+        commit=${1:-HEAD}; \
+        git cdi $commit~1..$commit; \
+    }; f"
+
     # update branch
     rbm = "!f() { \
         branch=$(git rev-parse --abbrev-ref HEAD); \
