@@ -78,7 +78,6 @@ set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=utf-8,ucs-bom,big5,cp950,gb2312,gbk,gb18030,latin1
 set termencoding=utf-8
-set binary
 set ttyfast
 
 "" Fix backspace indent
