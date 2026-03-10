@@ -1,10 +1,6 @@
 "*****************************************************************************
 "" Vim-PLug core
 "*****************************************************************************
-if has('vim_starting')
-  set nocompatible               " Be iMproved
-endif
-
 let vimplug_exists=expand('~/.vim/autoload/plug.vim')
 
 if !filereadable(vimplug_exists)
@@ -77,8 +73,6 @@ filetype plugin indent on
 set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=utf-8,ucs-bom,big5,cp950,gb2312,gbk,gb18030,latin1
-set termencoding=utf-8
-set ttyfast
 
 "" Fix backspace indent
 set backspace=indent,eol,start
@@ -135,7 +129,6 @@ if !exists('g:not_finish_vimplug')
 endif
 
 set mousemodel=popup
-set t_Co=256
 set guioptions=egmrti
 set gfn=Monospace\ 10
 
@@ -151,14 +144,6 @@ else
   let g:indentLine_char = '┆'
   let g:indentLine_faster = 1
 
-
-  if $COLORTERM == 'gnome-terminal'
-    set term=gnome-256color
-  else
-    if $TERM == 'xterm'
-      set term=xterm-256color
-    endif
-  endif
 
 endif
 
@@ -241,7 +226,6 @@ augroup END
 augroup vimrc-make-cmake
   autocmd!
   autocmd FileType make setlocal noexpandtab
-  autocmd BufNewFile,BufRead CMakeLists.txt setlocal filetype=cmake
 augroup END
 
 set autoread
