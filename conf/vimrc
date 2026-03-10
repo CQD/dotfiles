@@ -160,7 +160,7 @@ else
   let g:indentLine_char = '┆'
   let g:indentLine_faster = 1
 
-  
+
   if $COLORTERM == 'gnome-terminal'
     set term=gnome-256color
   else
@@ -168,7 +168,7 @@ else
       set term=xterm-256color
     endif
   endif
-  
+
 endif
 
 
@@ -234,11 +234,11 @@ endif
 "*****************************************************************************
 "" Autocmd Rules
 "*****************************************************************************
-"" The PC is fast enough, do syntax highlight syncing from start
-augroup vimrc-sync-fromstart
-  autocmd!
-  autocmd BufEnter * :syntax sync fromstart
-augroup END
+"" 確保 syntax highlight 完整，但是大檔案會很慢，先不使用
+"" augroup vimrc-sync-fromstart
+""   autocmd!
+""   autocmd BufEnter * :syntax sync fromstart
+"" augroup END
 
 "" Remember cursor position
 augroup vimrc-remember-cursor-position
