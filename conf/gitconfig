@@ -53,10 +53,12 @@
     # update branch
     rbm = "!f() { \
         branch=$(git rev-parse --abbrev-ref HEAD); \
+        mb=$( (git symbolic-ref -q --short refs/remotes/origin/HEAD || echo local/master) | cut -d / -f 2); \
         git stash \
-        && git cm \
+        && git co $mb \
         && git fr \
         && git co $branch \
+        && git rb $mb \
         && git stash pop; \
     }; f"
 
