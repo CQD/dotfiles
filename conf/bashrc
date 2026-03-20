@@ -92,32 +92,27 @@ function git_branch {
 
 # random choose color according to input string
 # ref: https://stackoverflow.com/a/27165165
+# 結果透過 _RAND_COLOR_RESULT 回傳（避免 subshell）
 function rand_color {
-    min=$1
-    scale=$2
-    text=$3
+    local min=$1
+    local scale=$2
+    local text=$3
 
-    r=-1; g=-1; b=-1
-
-    RANDOM=$(num-from-string $text); #seed with input string
-    r=$(( ( $RANDOM % $scale ) + $min));
-    g=$(( ( $RANDOM % $scale ) + $min));
-    b=$(( ( $RANDOM % $scale ) + $min));
-
-    color_code=$(( 16 + 36 * $r + 6 * $g + $b))
-    color_code=$(printf "%03d" $color_code)
-    echo $color_code
-}
-
-function num-from-string {
-    local out i a
-
-    out=1
-    for ((i=0;i<${#1};++i)); do
-        printf -v a "%d\n" "'${1:i:1}"
-        out+=$((a%10))
+    # inline num-from-string: 將字串轉為數字作為 RANDOM seed
+    local _nfs_out=1
+    local _nfs_i _nfs_a
+    for ((_nfs_i=0;_nfs_i<${#text};++_nfs_i)); do
+        printf -v _nfs_a "%d" "'${text:_nfs_i:1}"
+        _nfs_out+=$((_nfs_a%10))
     done
-    echo $(($out % 1000000))
+    RANDOM=$((_nfs_out % 1000000))
+
+    local r=$(( ( RANDOM % scale ) + min))
+    local g=$(( ( RANDOM % scale ) + min))
+    local b=$(( ( RANDOM % scale ) + min))
+
+    _RAND_COLOR_RESULT=$(( 16 + 36 * r + 6 * g + b))
+    printf -v _RAND_COLOR_RESULT "%03d" "$_RAND_COLOR_RESULT"
 }
 
 function ps_login {
@@ -125,8 +120,10 @@ function ps_login {
     _HOSTNAME=${_HOSTNAME/.lan/}
     _HOSTNAME=${_HOSTNAME/.compute.internal/.aws}
 
-    user_color=$(rand_color 3 3 $USER)
-    host_color=$(rand_color 3 3 $_HOSTNAME)
+    rand_color 3 3 "$USER"
+    user_color=$_RAND_COLOR_RESULT
+    rand_color 3 3 "$_HOSTNAME"
+    host_color=$_RAND_COLOR_RESULT
 
     bgcolor=017
 
@@ -172,7 +169,8 @@ function ps_git {
         elif [ "$branch" == "develop" ] ; then
             bgcolor=100
         else
-            bgcolor=$(rand_color 0 3 $branch)
+            rand_color 0 3 "$branch"
+            bgcolor=$_RAND_COLOR_RESULT
         fi
     else
         bgcolor=136
