@@ -116,22 +116,28 @@ function rand_color {
 }
 
 function ps_login {
+    if [ -n "$_PS_LOGIN_CACHE" ]; then
+        echo -ne "$_PS_LOGIN_CACHE"
+        return
+    fi
+
     _HOSTNAME=${PS_HOSTNAME:-$HOSTNAME}
     _HOSTNAME=${_HOSTNAME/.lan/}
     _HOSTNAME=${_HOSTNAME/.compute.internal/.aws}
 
     rand_color 3 3 "$USER"
-    user_color=$_RAND_COLOR_RESULT
+    local user_color=$_RAND_COLOR_RESULT
     rand_color 3 3 "$_HOSTNAME"
-    host_color=$_RAND_COLOR_RESULT
+    local host_color=$_RAND_COLOR_RESULT
 
-    bgcolor=017
+    local bgcolor=017
 
     if [ "$USER" == "root" ]; then
         user_color="196"
     fi
 
-    echo -ne '\[\e[48;5;'$bgcolor'm\e[38;5;'$user_color'm\] '$USER'\[\e[38;5;248m\]@\[\e[38;5;'$host_color'm\]'$_HOSTNAME' \[\e[38;5;'$bgcolor'm\]'
+    _PS_LOGIN_CACHE='\[\e[48;5;'$bgcolor'm\e[38;5;'$user_color'm\] '$USER'\[\e[38;5;248m\]@\[\e[38;5;'$host_color'm\]'$_HOSTNAME' \[\e[38;5;'$bgcolor'm\]'
+    echo -ne "$_PS_LOGIN_CACHE"
 }
 
 function ps_path {
