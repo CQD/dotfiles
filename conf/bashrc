@@ -217,33 +217,43 @@ export CQD_TIMER_EXP=''
 export CQD_TIMER_DESC=''
 
 function ps_time {
-    fgcolor=253
-    bgcolor=237
+    local fgcolor=253
+    local bgcolor=237
 
-    # time_ary[0] => HH:MM:SS
-    # time_ary[1] => unix timestamp
-    time_ary=($(date +'%H:%M:%S %s'))
-    timer_txt=''
+    local _now=$EPOCHSECONDS
+    local _time_hms
+    if [ -n "$_now" ]; then
+        # Bash 5+
+        printf -v _time_hms "%(%H:%M:%S)T" "$_now"
+    else
+        # Bash <5 fallback
+        local _time_ary=($(date +'%H:%M:%S %s'))
+        _time_hms=${_time_ary[0]}
+        _now=${_time_ary[1]}
+    fi
 
-    if [ ! "$CQD_TIMER_EXP" == "" ] ; then
-        if [ "${time_ary[1]}" -gt "$CQD_TIMER_EXP" ]; then
+    local timer_txt=''
+
+    if [ -n "$CQD_TIMER_EXP" ] ; then
+        if [ "$_now" -gt "$CQD_TIMER_EXP" ]; then
             bgcolor=124
             timer_txt=" ⏰$CQD_TIMER_DESC"
         else
-            time_used=$(($CQD_TIMER_EXP - ${time_ary[1]}))
-            hh=$(($time_used / 3600))
-            mm=$((($time_used % 3600) / 60))
-            ss=$(($time_used % 60))
+            local time_used=$(($CQD_TIMER_EXP - _now))
+            local hh=$(($time_used / 3600))
+            local mm=$((($time_used % 3600) / 60))
+            local ss=$(($time_used % 60))
+            local hms
             if [ "$hh" == "0" ]; then
-                hms=$(printf "%02d:%02d" "$mm" "$ss")
+                printf -v hms "%02d:%02d" "$mm" "$ss"
             else
-                hms=$(printf "%02d:%02d:%02d" "$hh" "$mm" "$ss")
+                printf -v hms "%02d:%02d:%02d" "$hh" "$mm" "$ss"
             fi
             timer_txt=" ⏰$hms"
         fi
     fi
 
-    echo -ne '\[\e[48;5;'$bgcolor'm\e[38;5;'$fgcolor'm\] '${time_ary[0]}${timer_txt}' \[\e[38;5;'$bgcolor'm\]'
+    echo -ne '\[\e[48;5;'$bgcolor'm\e[38;5;'$fgcolor'm\] '${_time_hms}${timer_txt}' \[\e[38;5;'$bgcolor'm\]'
 }
 
 function timer() {
