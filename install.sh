@@ -88,6 +88,9 @@ mkdln tigrc
 touch -a ~/.bashrc_local
 touch -a ~/.gitconfig_local
 
+mkdir -p ~/.ssh && chmod 700 ~/.ssh
+mkln $BASEDIR/conf/sshrc .ssh/rc
+
 if [ -d ~/.vim ]; then
     echo "~/.vim 已存在，必要時手動移除之"
 fi

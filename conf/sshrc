@@ -1,0 +1,5 @@
+# 每次 SSH 連線時，把 agent socket symlink 到固定路徑
+# 這樣 tmux 裡的 shell 不需要手動更新 SSH_AUTH_SOCK
+if [ -S "$SSH_AUTH_SOCK" ]; then
+    ln -sf "$SSH_AUTH_SOCK" ~/.ssh/auth_sock
+fi

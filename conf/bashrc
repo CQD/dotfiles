@@ -460,13 +460,10 @@ dv() {
     deactivate
 }
 
-# Hack for tmux agent forwarding
-fixssh() {
-    eval $(tmux show-env -s |grep '^SSH_')
-    echo SSH_* envs re-evaluated.
-}
-if  [ "$TMUX" ]; then
-    fixssh
+# SSH agent forwarding: 使用固定路徑的 symlink（由 ~/.ssh/rc 建立）
+# 這樣 tmux re-attach 後不需要手動更新 SSH_AUTH_SOCK
+if [ -S ~/.ssh/auth_sock ]; then
+    export SSH_AUTH_SOCK=~/.ssh/auth_sock
 fi
 
 # misc
