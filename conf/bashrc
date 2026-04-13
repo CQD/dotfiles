@@ -116,7 +116,7 @@ function rand_color {
 
 function ps_login {
     if [ -n "$_PS_LOGIN_CACHE" ]; then
-        echo -ne "$_PS_LOGIN_CACHE"
+        PS1+="$_PS_LOGIN_CACHE"
         return
     fi
 
@@ -136,7 +136,7 @@ function ps_login {
     fi
 
     _PS_LOGIN_CACHE='\[\e[48;5;'$bgcolor'm\e[38;5;'$user_color'm\] '$USER'\[\e[38;5;248m\]@\[\e[38;5;'$host_color'm\]'$_HOSTNAME' \[\e[38;5;'$bgcolor'm\]'
-    echo -ne "$_PS_LOGIN_CACHE"
+    PS1+="$_PS_LOGIN_CACHE"
 }
 
 function ps_path {
@@ -144,7 +144,7 @@ function ps_path {
     fgcolor=255
     local_path=${PWD/#$HOME/\~}
 
-    echo -ne '\[\e[48;5;'$bgcolor'm\]'$PS_TRIANGLE'\[\e[38;5;'$fgcolor'm\] '$local_path' \[\e[38;5;'$bgcolor'm\]'
+    PS1+='\[\e[48;5;'$bgcolor'm\]'$PS_TRIANGLE'\[\e[38;5;'$fgcolor'm\] '$local_path' \[\e[38;5;'$bgcolor'm\]'
 }
 
 function ps_git {
@@ -182,7 +182,7 @@ function ps_git {
         branch_symbol='➦'
     fi
 
-    echo -ne '\[\e[48;5;'$bgcolor'm\]'$PS_TRIANGLE'\[\e[38;5;'$fgcolor'm\] '$branch_symbol' '$branch' '
+    PS1+='\[\e[48;5;'$bgcolor'm\]'$PS_TRIANGLE'\[\e[38;5;'$fgcolor'm\] '$branch_symbol' '$branch' '
 
     # print status
     loop_var=(
@@ -205,10 +205,10 @@ function ps_git {
         flag=${loop_var[i]}
         bgcolor=${loop_var[i+2]}
 
-        echo -ne '\[\e[48;5;'$bgcolor'm\]' $flag$cnt' '
+        PS1+='\[\e[48;5;'$bgcolor'm\] '$flag$cnt' '
     done
 
-    echo -ne '\[\e[0;38;5;'$bgcolor'm\]'
+    PS1+='\[\e[0;38;5;'$bgcolor'm\]'
 }
 
 
@@ -252,7 +252,7 @@ function ps_time {
         fi
     fi
 
-    echo -ne '\[\e[48;5;'$bgcolor'm\e[38;5;'$fgcolor'm\] '${_time_hms}${timer_txt}' \[\e[38;5;'$bgcolor'm\]'
+    PS1+='\[\e[48;5;'$bgcolor'm\e[38;5;'$fgcolor'm\] '${_time_hms}${timer_txt}' \[\e[38;5;'$bgcolor'm\]'
 }
 
 function timer() {
@@ -298,7 +298,7 @@ function ps_venv() {
     fgcolor=226
     bgcolor=094
 
-    echo -ne "\[\e[48;5;${bgcolor}m\]${PS_TRIANGLE}\[\e[38;5;${fgcolor}m\] 🐍$venv_name \[\e[38;5;${bgcolor}m\]"
+    PS1+="\[\e[48;5;${bgcolor}m\]${PS_TRIANGLE}\[\e[38;5;${fgcolor}m\] 🐍$venv_name \[\e[38;5;${bgcolor}m\]"
 }
 
 function ps_marker() {
@@ -318,22 +318,19 @@ function ps_marker() {
         fi
     fi
 
-    echo -ne '\[\e[48;5;'$bgcolor'm\]'$PS_TRIANGLE'\[\e[38;5;'$fgcolor'm\] '$_PS_STATUS'$ \[\e[38;5;'$bgcolor'm\]'
+    PS1+='\[\e[48;5;'$bgcolor'm\]'$PS_TRIANGLE'\[\e[38;5;'$fgcolor'm\] '$_PS_STATUS'$ \[\e[38;5;'$bgcolor'm\]'
 }
 function ps_run() {
-    prev_status_code=$?  # store status for later use, as it will be cleared by next command
+    local prev_status_code=$?  # store status for later use, as it will be cleared by next command
 
-    _LINE_END='\[\e[40m\]'$PS_TRIANGLE'\[\e[0;30m\]'
+    local _LINE_END='\[\e[40m\]'$PS_TRIANGLE'\[\e[0;30m\]'
 
-    # start_time=$EPOCHREALTIME
-    echo -ne "\n"
-    ps_login; ps_path; ps_git; echo -ne "$_LINE_END\n"
-    ps_time; ps_venv; ps_marker "$prev_status_code"; echo -ne "$_LINE_END \[\e[0m\]"
-    # end_time=$EPOCHREALTIME
-    # echo -ne $(scale=3 echo "$end_time - $start_time" | bc)" "
+    PS1=$'\n'
+    ps_login; ps_path; ps_git; PS1+="${_LINE_END}"$'\n'
+    ps_time; ps_venv; ps_marker "$prev_status_code"; PS1+="${_LINE_END} \[\e[0m\]"
 }
 
-PROMPT_COMMAND='PS1=$(ps_run)'
+PROMPT_COMMAND='ps_run'
 
 ###############################
 # Run scripts
