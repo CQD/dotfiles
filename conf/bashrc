@@ -8,7 +8,6 @@
 export EDITOR=vim
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
-export TERM=xterm-256color
 
 export VIRTUAL_ENV_DISABLE_PROMPT=1  # 停用 virtualenv 的 prompt 改寫，後面會用 $VIRTUAL_ENV 來判斷
 
