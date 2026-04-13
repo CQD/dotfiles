@@ -15,6 +15,8 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1  # 停用 virtualenv 的 prompt 改寫，後
                                               # https://superuser.com/questions/424086
 PATH=$PATH:~/bin
 
+_UNAME=$(uname)
+
 PS_TRIANGLE=$'\uE0B0'
 
 # https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html
@@ -368,13 +370,13 @@ fi
 ###############################
 
 #sets up proper alias commands when called
-if [ "$(uname)" = "Linux" ]; then
+if [ "$_UNAME" = "Linux" ]; then
     # set up color for linux
     alias grep='grep --color=auto'
     alias fgrep='grep -F --color=auto'
     alias egrep='grep -E --color=auto'
     alias ls='ls --color=auto -vG'
-elif [ "$(uname)" = "Darwin" ]; then
+elif [ "$_UNAME" = "Darwin" ]; then
     alias ls='ls -vG'
 else
     alias ls='ls -G'
