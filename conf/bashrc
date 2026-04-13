@@ -159,14 +159,7 @@ function ps_git {
         return
     fi
 
-    git_info=( $git_info )
-    prefix=${git_info[0]}
-    branch=${git_info[1]}
-
-    local modified=${git_info[2]}
-    local staged=${git_info[3]}
-    local untracked=${git_info[4]}
-    local conflict=${git_info[5]}
+    read -r prefix branch modified staged untracked conflict <<< "$git_info"
 
     local branch_symbol='⎇'
 
