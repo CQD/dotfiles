@@ -39,17 +39,19 @@ EXIT_CODES_DESC[141]="SIGPIPE"
 # print git branch status
 function git_branch {
     # modified files
+    local st
     st=$(git status -s 2> /dev/null )
     if [ ! $? == "0" ] ; then
         return
     fi
 
-    modified=0
-    staged=0
-    untracked=0
-    conflict=0
+    local modified=0
+    local staged=0
+    local untracked=0
+    local conflict=0
 
     if [ ! "" == "$st" ] ; then
+        local line staged_flag not_staged_flag
         while IFS= read -r line; do
             staged_flag="${line:0:1}"
             not_staged_flag="${line:1:1}"
@@ -77,8 +79,8 @@ function git_branch {
     fi
 
     # ref name, or commit hash
-    head_type='b' # branch
-    ref=$(git symbolic-ref --short HEAD 2> /dev/null);
+    local head_type='b' # branch
+    local ref=$(git symbolic-ref --short HEAD 2> /dev/null);
 
     if [ "" == "$ref" ] ; then
         head_type='h' # hash
@@ -140,17 +142,17 @@ function ps_login {
 }
 
 function ps_path {
-    bgcolor=026
-    fgcolor=255
-    local_path=${PWD/#$HOME/\~}
+    local bgcolor=026
+    local fgcolor=255
+    local local_path=${PWD/#$HOME/\~}
 
     PS1+='\[\e[48;5;'$bgcolor'm\]'$PS_TRIANGLE'\[\e[38;5;'$fgcolor'm\] '$local_path' \[\e[38;5;'$bgcolor'm\]'
 }
 
 function ps_git {
-    local branch prefix color
+    local branch prefix bgcolor fgcolor
 
-    git_info=$(git_branch)
+    local git_info=$(git_branch)
     if [ "$git_info" == "" ] ; then
         return
     fi
@@ -159,12 +161,12 @@ function ps_git {
     prefix=${git_info[0]}
     branch=${git_info[1]}
 
-    modified=${git_info[2]}
-    staged=${git_info[3]}
-    untracked=${git_info[4]}
-    conflict=${git_info[5]}
+    local modified=${git_info[2]}
+    local staged=${git_info[3]}
+    local untracked=${git_info[4]}
+    local conflict=${git_info[5]}
 
-    branch_symbol='⎇'
+    local branch_symbol='⎇'
 
     fgcolor=231
 
@@ -185,13 +187,14 @@ function ps_git {
     PS1+='\[\e[48;5;'$bgcolor'm\]'$PS_TRIANGLE'\[\e[38;5;'$fgcolor'm\] '$branch_symbol' '$branch' '
 
     # print status
-    loop_var=(
+    local loop_var=(
         M $modified  160
         S $staged    172
         U $untracked 026
         C $conflict  163
     )
 
+    local i cnt flag
     for ((i=0; i<${#loop_var[@]}; i+=3)); do
         cnt=${loop_var[i+1]}
         if [ "$cnt" == "0" ] ; then
@@ -204,7 +207,6 @@ function ps_git {
 
         flag=${loop_var[i]}
         bgcolor=${loop_var[i+2]}
-
         PS1+='\[\e[48;5;'$bgcolor'm\] '$flag$cnt' '
     done
 
@@ -292,22 +294,22 @@ function ps_venv() {
     fi
 
     # replace '/venv' with ''
-    parent_name=${VIRTUAL_ENV/\/venv/}
-    venv_name=$(basename $parent_name)
+    local parent_name=${VIRTUAL_ENV/\/venv/}
+    local venv_name=$(basename "$parent_name")
 
-    fgcolor=226
-    bgcolor=094
+    local fgcolor=226
+    local bgcolor=094
 
     PS1+="\[\e[48;5;${bgcolor}m\]${PS_TRIANGLE}\[\e[38;5;${fgcolor}m\] 🐍$venv_name \[\e[38;5;${bgcolor}m\]"
 }
 
 function ps_marker() {
-    _STATUS=$1
+    local _STATUS=$1
 
-    _PS_STATUS=''
+    local _PS_STATUS=''
 
-    fgcolor=000
-    bgcolor=255
+    local fgcolor=000
+    local bgcolor=255
 
     if [ $_STATUS -ne 0 ] ; then
         fgcolor=255
