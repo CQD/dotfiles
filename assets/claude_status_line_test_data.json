@@ -1,0 +1,50 @@
+{
+  "session_id": "a3df8bf3-5382-40af-95a5-7bf204cbc3fe",
+  "transcript_path": "/home/cqd/.claude/projects/-home-cqd-repo-ask-some_proj_folder/a3df8bf3-5382-40af-95a5-7bf204cbc3fe.jsonl",
+  "cwd": "/home/cqd/repo/some_proj_folder",
+  "model": {
+    "id": "claude-opus-4-6[1m]",
+    "display_name": "Opus 4.6 (1M context)"
+  },
+  "workspace": {
+    "current_dir": "/home/cqd/repo/some_proj_folder",
+    "project_dir": "/home/cqd/repo/some_proj_folder",
+    "added_dirs": [],
+    "git_worktree": "some_proj_folder"
+  },
+  "version": "2.1.109",
+  "output_style": {
+    "name": "default"
+  },
+  "cost": {
+    "total_cost_usd": 3.8918618,
+    "total_duration_ms": 56657040,
+    "total_api_duration_ms": 709832,
+    "total_lines_added": 95,
+    "total_lines_removed": 216
+  },
+  "context_window": {
+    "total_input_tokens": 1964,
+    "total_output_tokens": 40688,
+    "context_window_size": 1000000,
+    "current_usage": {
+      "input_tokens": 1,
+      "output_tokens": 216,
+      "cache_creation_input_tokens": 213,
+      "cache_read_input_tokens": 123474
+    },
+    "used_percentage": 12,
+    "remaining_percentage": 88
+  },
+  "exceeds_200k_tokens": false,
+  "rate_limits": {
+    "five_hour": {
+      "used_percentage": 1,
+      "resets_at": 1776344400
+    },
+    "seven_day": {
+      "used_percentage": 50,
+      "resets_at": 1776513600
+    }
+  }
+}
