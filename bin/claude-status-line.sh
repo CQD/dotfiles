@@ -24,34 +24,49 @@ input=$(cat)
 ' <<< "$input")
 
 
+C_OK=$'\033[32m'
+C_NOTI=$'\033[36m'
+C_WARN=$'\033[33m'
+C_ERR=$'\033[31m'
+
 # Context Windows 長條圖
-BAR_W=30
-C_IN=$'\033[36m'    # cyan  — input
-C_OUT=$'\033[33m'   # yellow — output
-C_FREE=$'\033[90m'  # gray  — unused
+BAR_W=15
+C_FREE=$'\033[90m'  # gray  — unused quota
 C_RST=$'\033[0m'
 
 TOTAL=$(( INPUT_TOKENS + OUTPUT_TOKENS ))
 CONTEXT_PCT=$(( TOTAL * 100 / CTX_SIZE ))
 
-IN_W=$(( INPUT_TOKENS * BAR_W / CTX_SIZE ))
-OUT_W=$(( OUTPUT_TOKENS * BAR_W / CTX_SIZE ))
-(( INPUT_TOKENS  > 0 && IN_W  == 0 )) && IN_W=1
-(( OUTPUT_TOKENS > 0 && OUT_W == 0 )) && OUT_W=1
-(( IN_W + OUT_W > BAR_W )) && OUT_W=$(( BAR_W - IN_W ))
-FREE_W=$(( BAR_W - IN_W - OUT_W ))
+if   ((  CONTEXT_PCT >= 70 )); then C_BAR=$C_ERR
+elif ((  CONTEXT_PCT >= 30 )); then C_BAR=$C_WARN
+elif ((  CONTEXT_PCT >= 20 )); then C_BAR=$C_NOTI
+else C_BAR=$C_OK
+fi
 
-printf -v in_bar   '%*s' "$IN_W"   ''; in_bar=${in_bar// /█}
-printf -v out_bar  '%*s' "$OUT_W"  ''; out_bar=${out_bar// /█}
-printf -v free_bar '%*s' "$FREE_W" ''; free_bar=${free_bar// /░}
+USED_W8=$(( (TOTAL * BAR_W * 8 / CTX_SIZE) ))
+USED_W=$(( USED_W8 / 8 ))
+USED_W8=$(( USED_W8 % 8))
 
-CONTEXT_BAR="${C_IN}${in_bar}${C_OUT}${out_bar}${C_FREE}${free_bar}${C_RST} ${CONTEXT_PCT}%"
+(( TOTAL > 0 && USED_W8  == 0 )) && USED_W8=1
+FREE_W=$(( BAR_W - USED_W ))
+(( USED_W8 > 0 )) && FREE_W=$(( FREE_W - 1 ))
+
+if   (( USED_W8 == 7 )); then end_bar=▉
+elif (( USED_W8 == 6 )); then end_bar=▊
+elif (( USED_W8 == 5 )); then end_bar=▋
+elif (( USED_W8 == 4 )); then end_bar=▌
+elif (( USED_W8 == 3 )); then end_bar=▍
+elif (( USED_W8 == 2 )); then end_bar=▎
+elif (( USED_W8 == 1 )); then end_bar=▏
+else end_bar=''; FREE_W=$(( FREE_W + 1 ))
+fi
+
+printf -v used_bar '%*s' "$USED_W" ''; used_bar=${used_bar// /█}
+printf -v free_bar '%*s' "$FREE_W" ''; # free_bar=${free_bar// /░}
+
+CONTEXT_BAR="${C_BAR}${used_bar}${end_bar}${C_FREE}${free_bar}${C_RST} ${C_BAR}${CONTEXT_PCT}%${C_RST}"
 
 # Session Limit
-C_OK=$'\033[36m'
-C_NOTI=$'\033[32m'
-C_WARN=$'\033[33m'
-C_ERR=$'\033[31m'
 
 NOW=${EPOCHSECONDS:-$(date +%s)}
 
@@ -68,8 +83,9 @@ elif (( SESSION_PCT >= 50 )); then C_SESSION=$C_NOTI
 else                               C_SESSION=$C_OK
 fi
 
+printf -v SESSION_PCT '%.0f' "$SESSION_PCT"
 SESSION_BAR="${C_SESSION}${SESSION_PCT}%${C_RST}${RESET_IN}"
 
 # Final line
-echo  "📁 ${DIR##*/} | 📖 ${CONTEXT_BAR} | 🕐 ${SESSION_BAR}"
+echo "📁 ${DIR##*/} | 📖 ${CONTEXT_BAR} | 🕐 ${SESSION_BAR}"
 
