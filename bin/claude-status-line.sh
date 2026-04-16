@@ -2,6 +2,37 @@
 
 # https://code.claude.com/docs/en/statusline
 
+C_OK=$'\033[32m'
+C_NOTI=$'\033[36m'
+C_WARN=$'\033[33m'
+C_ERR=$'\033[31m'
+C_RST=$'\033[0m'
+
+NOW=${EPOCHSECONDS:-$(date +%s)}
+
+function usage_render() {
+  local -n _out_var=$1
+  local sec=$2
+  local pct=$3
+
+  printf -v pct '%.0f' "$pct"  # 切到整數，避免 float 尾數影響顯示
+
+  if   (( pct >= 90 )); then C_PCT=$C_ERR
+  elif (( pct >= 75 )); then C_PCT=$C_WARN
+  elif (( pct >= 50 )); then C_PCT=$C_NOTI
+  else                       C_PCT=$C_OK
+  fi
+
+  if   (( sec >= 86400 )); then printf -v reset_in ' (%dd)' $(( sec / 86400 ))
+  elif (( sec >= 3600  )); then printf -v reset_in ' (%dh%dm)' $(( sec / 3600 )) $(( sec % 3600 / 60 ))
+  elif (( sec >= 60    )); then printf -v reset_in ' (%dm%ds)' $(( sec / 60 )) $(( sec % 60 ))
+  elif (( sec  < 0     )); then printf -v reset_in ''  # 沒資料，或是該 reset 的但還沒 reset
+  else                          printf -v reset_in ' (%ds)' "$sec"
+  fi
+
+  _out_var="${C_PCT}${pct}%${C_RST}${reset_in}"
+}
+
 input=$(cat)
 
 # 單次 jq 呼叫取出所有欄位（省 fork）
@@ -11,6 +42,8 @@ input=$(cat)
   read -r OUTPUT_TOKENS
   read -r SESSION_PCT
   read -r SESSION_RST_TIME
+  read -r WEEK_PCT
+  read -r WEEK_RST_TIME
   read -r DIR
 } < <(jq -r -c '
   (.context_window.context_window_size // 0),
@@ -20,19 +53,14 @@ input=$(cat)
   (.context_window.current_usage.output_tokens // 0),
   (.rate_limits.five_hour.used_percentage // 0),
   (.rate_limits.five_hour.resets_at // 0),
+  (.rate_limits.seven_day.used_percentage // 0),
+  (.rate_limits.seven_day.resets_at // 0),
   .workspace.current_dir
 ' <<< "$input")
-
-
-C_OK=$'\033[32m'
-C_NOTI=$'\033[36m'
-C_WARN=$'\033[33m'
-C_ERR=$'\033[31m'
 
 # Context Windows 長條圖
 BAR_W=15
 C_FREE=$'\033[90m'  # gray  — unused quota
-C_RST=$'\033[0m'
 
 TOTAL=$(( INPUT_TOKENS + OUTPUT_TOKENS ))
 CONTEXT_PCT=$(( TOTAL * 100 / CTX_SIZE ))
@@ -66,26 +94,13 @@ printf -v free_bar '%*s' "$FREE_W" ''; # free_bar=${free_bar// /░}
 
 CONTEXT_BAR="${C_BAR}${used_bar}${end_bar}${C_FREE}${free_bar}${C_RST} ${C_BAR}${CONTEXT_PCT}%${C_RST}"
 
-# Session Limit
+# Usage Limit
 
-NOW=${EPOCHSECONDS:-$(date +%s)}
+(( SESSION_RESET_IN_SEC = SESSION_RST_TIME - NOW ))
+(( WEEK_RESET_IN_SEC = WEEK_RST_TIME - NOW ))
 
-(( RESET_IN_SEC = SESSION_RST_TIME - NOW ))
-if   (( RESET_IN_SEC >= 3600 )); then RESET_IN=" ($(( RESET_IN_SEC / 3600 ))h$(( RESET_IN_SEC % 3600 / 60 ))m)"
-elif (( RESET_IN_SEC >= 60   )); then RESET_IN=" ($(( RESET_IN_SEC / 60 ))m$(( RESET_IN_SEC % 60 ))s)"
-elif (( RESET_IN_SEC  < 0    )); then RESET_IN=""
-else                                  RESET_IN=" (${RESET_IN_SEC}s)"
-fi
-
-if   (( SESSION_PCT >= 90 )); then C_SESSION=$C_ERR
-elif (( SESSION_PCT >= 75 )); then C_SESSION=$C_WARN
-elif (( SESSION_PCT >= 50 )); then C_SESSION=$C_NOTI
-else                               C_SESSION=$C_OK
-fi
-
-printf -v SESSION_PCT '%.0f' "$SESSION_PCT"
-SESSION_BAR="${C_SESSION}${SESSION_PCT}%${C_RST}${RESET_IN}"
+usage_render SESSION_BAR "$SESSION_RESET_IN_SEC" "$SESSION_PCT"
+usage_render WEEK_BAR "$WEEK_RESET_IN_SEC" "$WEEK_PCT"
 
 # Final line
-echo "📁 ${DIR##*/} | 📖 ${CONTEXT_BAR} | 🕐 ${SESSION_BAR}"
-
+echo "📁 ${DIR##*/} | 📖 ${CONTEXT_BAR} | 🕐  ${SESSION_BAR} | 🗓️  ${WEEK_BAR}"
