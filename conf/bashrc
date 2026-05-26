@@ -70,12 +70,10 @@ function git_branch {
 
             if [[ "$staged_flag" != " " ]]; then
                 staged=$((staged + 1))
-                continue
             fi
 
             if [[ "$not_staged_flag" != " " ]]; then
                 modified=$((modified + 1))
-                continue
             fi
         done <<< "$st"
     fi
