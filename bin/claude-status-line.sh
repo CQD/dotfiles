@@ -102,5 +102,12 @@ CONTEXT_BAR="${C_BAR}${used_bar}${end_bar}${C_FREE}${free_bar}${C_RST} ${C_BAR}$
 usage_render SESSION_BAR "$SESSION_RESET_IN_SEC" "$SESSION_PCT"
 usage_render WEEK_BAR "$WEEK_RESET_IN_SEC" "$WEEK_PCT"
 
+# Git branch
+BRANCH=$(git -C "$DIR" symbolic-ref --short HEAD 2>/dev/null) \
+  || BRANCH=$(git -C "$DIR" rev-parse --short HEAD 2>/dev/null)
+
+BRANCH_SEG=''
+[[ -n $BRANCH ]] && BRANCH_SEG=" 🌿 ${BRANCH}"
+
 # Final line
-echo "📁 ${DIR##*/} | 📖 ${CONTEXT_BAR} | 🕐  ${SESSION_BAR} | 🗓️  ${WEEK_BAR}"
+echo "📁 ${DIR##*/}${BRANCH_SEG} | 📖 ${CONTEXT_BAR} | 🕐  ${SESSION_BAR} | 🗓️  ${WEEK_BAR}"
