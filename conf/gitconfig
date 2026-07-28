@@ -42,6 +42,7 @@
     rpo = remote prune origin
     fo = fetch origin
     po = push origin
+    pof = push origin --force-with-lease
 
     cdic = cdi --cached
 
